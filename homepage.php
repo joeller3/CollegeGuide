@@ -96,7 +96,7 @@
             <div class="carousel-caption">
               <h1>College Directory</h1>
               <p>Find and connect with alumni in colleges across the nation!</p>
-              <p><a class="btn btn-lg btn-primary" href="#" role="button">Connect</a></p>
+              <p><a class="btn btn-lg btn-primary" href="/index.php" role="button">Connect</a></p>
             </div>
           </div>
         </div>
@@ -107,7 +107,7 @@
             <div class="carousel-caption">
               <h1>College Map</h1>
               <p>Explore colleges and universities that Girl Who Code alumni have attended over the years. You might find one that's a perfect match for you!</p>
-              <p><a class="btn btn-lg btn-primary" href="#" role="button">Explore</a></p>
+              <p><a class="btn btn-lg btn-primary collegeMap" href="#" role="button">Explore</a></p>
             </div>
           </div>
         </div>

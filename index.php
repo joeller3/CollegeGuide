@@ -1,5 +1,5 @@
 <?
-$ALUM_SCHOOLS = ['Brandeis University', 'Columbia University', 'New York City College'];
+$ALUM_SCHOOLS = ['Brandeis University', 'Columbia University', 'New York City College', 'Brooklyn Manhattan Community College', 'Barnard College', 'Amherst College', 'Oberlin College' ];
 $REGIONS = ['Northeast', 'Midwest', 'South', 'West'];
 ?>
 
@@ -26,14 +26,13 @@ $REGIONS = ['Northeast', 'Midwest', 'South', 'West'];
       <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
       <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
-		<script src="select2-4.0.3/src/js/jquery.select2.js"></script>
 		
-		<!--<script type="text/javascript">-->
-		<!--	$(document).ready(function() {-->
-		<!--		$(".inputs").select2();-->
-		<!--	});-->
-		<!--</script>-->
-
+		
+		<!-- Select 2-->
+		<link href="select2-4.0.3/dist/css/select2.min.css" rel="stylesheet" />
+		<script src="select2-4.0.3/dist/js/select2.min.js"></script>
+		
+		<script src="alumni.js"></script>
 		
   </head>
 
@@ -48,11 +47,11 @@ $REGIONS = ['Northeast', 'Midwest', 'South', 'West'];
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand" href="#">Girls Who Code</a>
+          <a class="navbar-brand" href="/homepage.php">Girls Who Code</a>
         </div>
         <div id="navbar" class="collapse navbar-collapse">
           <ul class="nav navbar-nav">
-            <li class="active"><a href="#">Home</a></li>
+            <li class="active"><a href="/homepage.php">Home</a></li>
             <li><a href="#about">About</a></li>
             <li><a href="#contact">Contact</a></li>
           </ul>
@@ -73,7 +72,7 @@ $REGIONS = ['Northeast', 'Midwest', 'South', 'West'];
         <form>
           <div class="form-group"> 
             <label for="College">College</label>
-			<select class="inputs form-control" id="inputCollege" placeholder="Select an Institution">
+			<select multiple class="input form-control" id="inputCollege" placeholder="Select an Institution">
 				<option value="" selected disabled>Please Select an Institution</option>
 			<?
 				foreach ($ALUM_SCHOOLS as $school){
@@ -84,7 +83,7 @@ $REGIONS = ['Northeast', 'Midwest', 'South', 'West'];
           </div>
           <div class="form-group">
             <label for="Region">Region</label>
-			<select class="inputs form-control" id="inputRegion" placeholder="Select a Region">
+			<select multiple class="input form-control" id="inputRegion" placeholder="Select a Region">
 				<option value="" selected disabled>Please Select a Region</option>
 				<?
 					foreach ($REGIONS as $region){
@@ -96,8 +95,8 @@ $REGIONS = ['Northeast', 'Midwest', 'South', 'West'];
           </div>
           <div class="form-group">
             <label for="Program">GWC Program</label>
-            <select class="inputs form-control" id="inputProgram" placeholder="Select GWC Program or Club">
-			  <option value="" selected disabled >Please Select a Program or Club</option>
+            <select multiple class="input form-control" id="inputProgram" placeholder="Select GWC Program or Club">
+							<option value="" selected disabled >Please Select a Program or Club</option>
               <option>IAC</option>
               <option>Goldman Sachs</option>
               <option>ATT</option>
@@ -107,8 +106,8 @@ $REGIONS = ['Northeast', 'Midwest', 'South', 'West'];
           </div>
           <div class="form-group">
             <label for="InstitutionType">Institution Type</label>
-            <select class="inputs form-control" id="inputInstitutionType">
-			  <option value="" selected disabled>Please Select an Institution Type</option>
+            <select multiple class="input form-control" id="inputInstitutionType">
+							<option value="" selected disabled>Please Select an Institution Type</option>
               <option>4-year College/ University</option>
               <option>2-year College</option>
             </select>
