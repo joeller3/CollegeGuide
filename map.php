@@ -54,7 +54,7 @@
         <h1>College Map</h1>
       </div>
 			
-			<!-- College Map -->
+			<!-- Map goes here ...-->
       
       
     </div><!-- /.container -->

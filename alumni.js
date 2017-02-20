@@ -1,5 +1,3 @@
-
-
 $(document).ready(function() {
   $("#inputCollege").select2({
     placeholder: "Select an Institution",

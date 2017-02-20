@@ -54,6 +54,7 @@ $REGIONS = ['Northeast', 'Midwest', 'South', 'West'];
             <li class="active"><a href="/homepage.php">Home</a></li>
             <li><a href="/map.php">College Map</a></li>
             <li><a href="/index.php">College Directory</a></li>
+						<li><a href="bd.php">DB</a></li>
           </ul>
         </div><!--/.nav-collapse -->
       </div>
