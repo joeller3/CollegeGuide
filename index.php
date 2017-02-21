@@ -1,6 +1,7 @@
 <?
 $ALUM_SCHOOLS = ['Brandeis University', 'Columbia University', 'New York City College', 'Brooklyn Manhattan Community College', 'Barnard College', 'Amherst College', 'Oberlin College' ];
 $REGIONS = ['Northeast', 'Midwest', 'South', 'West'];
+$PROGRAMS = ['IAC', 'Goldman Sachs', 'IBM', 'Google', 'Twitter'];
 ?>
 
 <html lang="en">
@@ -28,11 +29,9 @@ $REGIONS = ['Northeast', 'Midwest', 'South', 'West'];
     <![endif]-->
 		
 		
-		<!-- Select 2-->
-		<link href="select2-4.0.3/dist/css/select2.min.css" rel="stylesheet" />
-		<script src="select2-4.0.3/dist/js/select2.min.js"></script>
-		
-		<script src="alumni.js"></script>
+		<?
+			include 'db.php';
+		?>
 		
   </head>
 
@@ -54,7 +53,7 @@ $REGIONS = ['Northeast', 'Midwest', 'South', 'West'];
             <li class="active"><a href="/homepage.php">Home</a></li>
             <li><a href="/map.php">College Map</a></li>
             <li><a href="/index.php">College Directory</a></li>
-						<li><a href="bd.php">DB</a></li>
+						<li><a href="db.php">DB</a></li>
           </ul>
         </div><!--/.nav-collapse -->
       </div>
@@ -73,47 +72,42 @@ $REGIONS = ['Northeast', 'Midwest', 'South', 'West'];
         <form>
           <div class="form-group"> 
             <label for="College">College</label>
-			<select multiple class="input form-control" id="inputCollege" placeholder="Select an Institution">
-				<option value="" selected disabled>Please Select an Institution</option>
+			<select multiple class="input form-control" id="College" placeholder="Select an Institution">
 			<?
 				foreach ($ALUM_SCHOOLS as $school){
-					echo "<option>$school</option>";
+					echo "<option value='$school'>$school</option>";
 				}
 			?>
 			</select>
           </div>
           <div class="form-group">
             <label for="Region">Region</label>
-			<select multiple class="input form-control" id="inputRegion" placeholder="Select a Region">
-				<option value="" selected disabled>Please Select a Region</option>
+			<select multiple class="input form-control" id="Region" placeholder="Select a Region">
 				<?
 					foreach ($REGIONS as $region){
-						echo "<option>$region</option>";
+						echo "<option value='$region'>$region</option>";
 					}
 				?>
 			</select>
-            <!--<input type="region" class="form-control" id="inputRegion" placeholder="Enter Region">-->
           </div>
           <div class="form-group">
             <label for="Program">GWC Program</label>
-            <select multiple class="input form-control" id="inputProgram" placeholder="Select GWC Program or Club">
-							<option value="" selected disabled >Please Select a Program or Club</option>
-              <option>IAC</option>
-              <option>Goldman Sachs</option>
-              <option>ATT</option>
-              <option>Twitter</option>
-              <option>Google</option>
+            <select multiple class="input form-control" id="Program" placeholder="Select GWC Program or Club">
+							<?
+								foreach ($PROGRAMS as $program){
+									echo "<option value='$program'>$program</option>";
+								}
+							?>
             </select>
           </div>
           <div class="form-group">
             <label for="InstitutionType">Institution Type</label>
-            <select multiple class="input form-control" id="inputInstitutionType">
-							<option value="" selected disabled>Please Select an Institution Type</option>
-              <option>4-year College/ University</option>
-              <option>2-year College</option>
+            <select multiple class="input form-control" id="CollegeType">
+              <option value="4yr">4-year College/ University</option>
+              <option value="2yr">2-year College</option>
             </select>
           </div>
-          <button type="submit" class="btn btn-primary">Submit</button>
+          <button type="submit" class="btn btn-primary" onclick="getValues();" >Submit</button>
         </form>
       </div><!-- /form -->
       
@@ -152,9 +146,20 @@ $REGIONS = ['Northeast', 'Midwest', 'South', 'West'];
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-    <script>window.jQuery || document.write('<script src="bootstrap-3.3.7-dist/js/tests/vendor/jquery.min.js"><\/script>')</script>
+    <!--<script>window.jQuery || document.write('<script src="bootstrap-3.3.7-dist/js/tests/vendor/jquery.min.js"><\/script>')</script>-->
     <script src="bootstrap-3.3.7-dist/js/tests/vendor/bootstrap.min.js"></script>
     <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
     <script src="bootstrap-3.3.7-dist/js/ie10-viewport-bug-workaround.js"></script>
+		
+		
+		<!-- Select 2-->
+		<!--<script src="select2-4.0.3/src/js/jquery.select2.js"></script>-->
+		<link href="select2-4.0.3/dist/css/select2.min.css" rel="stylesheet" />
+	
+		<script src="select2-4.0.3/dist/js/select2.min.js"></script>
+			
+		<script src="alumni.js"></script>
+		
+		
   </body>
 </html>
