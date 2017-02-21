@@ -1,4 +1,6 @@
 $(document).ready(function() {
+    
+  //Form input values   
   $("#College").select2({
     placeholder: "Select an Institution",
     allowClear: true
@@ -18,15 +20,14 @@ $(document).ready(function() {
     placeholder: "Select a college type",
     allowClear: true
   });
-});
-
-//get user inputted values 
-function getValues(){
+  
+  //submit button
+  $("#SubmitBtn").click(function(){
     var region = document.getElementById("Region").value;
     var college = document.getElementById("College").value;
     var program = document.getElementById("Program").value;
     var collegeType = document.getElementById("CollegeType").value;
     
     alert(region +" "+ college +" "+program +" "+ collegeType);
-}
-
+  });
+});

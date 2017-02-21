@@ -2,7 +2,37 @@
 $ALUM_SCHOOLS = ['Brandeis University', 'Columbia University', 'New York City College', 'Brooklyn Manhattan Community College', 'Barnard College', 'Amherst College', 'Oberlin College' ];
 $REGIONS = ['Northeast', 'Midwest', 'South', 'West'];
 $PROGRAMS = ['IAC', 'Goldman Sachs', 'IBM', 'Google', 'Twitter'];
+
+//User input values 
+if ($_POST['colleges'] || $_POST['regions'] || $_POST['types'] || $_POST['programs']){
+		
+	$InputColleges = $_POST['colleges'];
+	$InputRegions = $_POST['regions'];
+	$InputTypes = $_POST['types'];
+	$InputPrograms = $_POST['programs'];
+	
+	print_r($InputColleges);
+	print_r($InputPrograms);
+	print_r($InputRegions);
+	print_r($InputTypes);
+	//foreach ($InputColleges as $input){
+	//	echo $input;
+	//}
+	//
+	//foreach ($InputPrograms as $input){
+	//	echo "<p>$input</p>";
+	//}
+	//
+	//foreach ($InputRegions as $input){
+	//	echo "<p>$input</p>";
+	//}
+	//
+	//foreach ($InputTypes as $input){
+	//	echo "<p>$input</p>";
+	//}
+}
 ?>
+
 
 <html lang="en">
   <head>
@@ -27,7 +57,6 @@ $PROGRAMS = ['IAC', 'Goldman Sachs', 'IBM', 'Google', 'Twitter'];
       <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
       <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
-		
 		
 		<?
 			include 'db.php';
@@ -69,10 +98,10 @@ $PROGRAMS = ['IAC', 'Goldman Sachs', 'IBM', 'Google', 'Twitter'];
       <!-- Form --> 
       <div class="container">
         <h2>Find Alumni</h2>
-        <form>
+        <form method="post">
           <div class="form-group"> 
             <label for="College">College</label>
-			<select multiple class="input form-control" id="College" placeholder="Select an Institution">
+			<select multiple="multiple" name="colleges[]" class="input form-control" id="College" placeholder="Select an Institution">
 			<?
 				foreach ($ALUM_SCHOOLS as $school){
 					echo "<option value='$school'>$school</option>";
@@ -82,7 +111,7 @@ $PROGRAMS = ['IAC', 'Goldman Sachs', 'IBM', 'Google', 'Twitter'];
           </div>
           <div class="form-group">
             <label for="Region">Region</label>
-			<select multiple class="input form-control" id="Region" placeholder="Select a Region">
+			<select multiple="multiple" name="regions[]" class="input form-control" id="Region" placeholder="Select a Region">
 				<?
 					foreach ($REGIONS as $region){
 						echo "<option value='$region'>$region</option>";
@@ -92,7 +121,7 @@ $PROGRAMS = ['IAC', 'Goldman Sachs', 'IBM', 'Google', 'Twitter'];
           </div>
           <div class="form-group">
             <label for="Program">GWC Program</label>
-            <select multiple class="input form-control" id="Program" placeholder="Select GWC Program or Club">
+            <select multiple="multiple" name="programs[]" class="input form-control" id="Program" placeholder="Select GWC Program or Club">
 							<?
 								foreach ($PROGRAMS as $program){
 									echo "<option value='$program'>$program</option>";
@@ -102,12 +131,12 @@ $PROGRAMS = ['IAC', 'Goldman Sachs', 'IBM', 'Google', 'Twitter'];
           </div>
           <div class="form-group">
             <label for="InstitutionType">Institution Type</label>
-            <select multiple class="input form-control" id="CollegeType">
+            <select multiple="multiple" name="types" class="input form-control" id="CollegeType">
               <option value="4yr">4-year College/ University</option>
               <option value="2yr">2-year College</option>
             </select>
           </div>
-          <button type="submit" class="btn btn-primary" onclick="getValues();" >Submit</button>
+          <button type="submit" class="btn btn-primary" id="SubmitBtn" >Submit</button>
         </form>
       </div><!-- /form -->
       
@@ -142,6 +171,8 @@ $PROGRAMS = ['IAC', 'Goldman Sachs', 'IBM', 'Google', 'Twitter'];
         </tbody>
       </table>
 		</div>
+		
+		
     <!-- Bootstrap core JavaScript
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
@@ -149,17 +180,11 @@ $PROGRAMS = ['IAC', 'Goldman Sachs', 'IBM', 'Google', 'Twitter'];
     <!--<script>window.jQuery || document.write('<script src="bootstrap-3.3.7-dist/js/tests/vendor/jquery.min.js"><\/script>')</script>-->
     <script src="bootstrap-3.3.7-dist/js/tests/vendor/bootstrap.min.js"></script>
     <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
-    <script src="bootstrap-3.3.7-dist/js/ie10-viewport-bug-workaround.js"></script>
-		
-		
+    <script src="bootstrap-3.3.7-dist/js/ie10-viewport-bug-workaround.js"></script>	
 		<!-- Select 2-->
-		<!--<script src="select2-4.0.3/src/js/jquery.select2.js"></script>-->
 		<link href="select2-4.0.3/dist/css/select2.min.css" rel="stylesheet" />
-	
 		<script src="select2-4.0.3/dist/js/select2.min.js"></script>
 			
 		<script src="alumni.js"></script>
-		
-		
   </body>
 </html>
