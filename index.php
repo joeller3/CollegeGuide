@@ -1,4 +1,5 @@
 <?
+
 $ALUM_SCHOOLS = ['Brandeis University', 'Columbia University', 'New York City College', 'Brooklyn Manhattan Community College', 'Barnard College', 'Amherst College', 'Oberlin College' ];
 $REGIONS = ['Northeast', 'Midwest', 'South', 'West'];
 $PROGRAMS = ['IAC', 'Goldman Sachs', 'IBM', 'Google', 'Twitter'];
@@ -60,10 +61,9 @@ if ($_POST['colleges'] || $_POST['regions'] || $_POST['types'] || $_POST['progra
 		
 		<?
 			include 'db.php';
-		?>
-		
-  </head>
 
+		?>
+  </head>
   <body>
     <!-- Navigation Bar -->
     <nav class="navbar navbar-inverse navbar-fixed-top">
@@ -82,7 +82,7 @@ if ($_POST['colleges'] || $_POST['regions'] || $_POST['types'] || $_POST['progra
             <li class="active"><a href="/homepage.php">Home</a></li>
             <li><a href="/map.php">College Map</a></li>
             <li><a href="/index.php">College Directory</a></li>
-						<li><a href="db.php">DB</a></li>
+						<li><a href="form.php">Form</a></li>
           </ul>
         </div><!--/.nav-collapse -->
       </div>
