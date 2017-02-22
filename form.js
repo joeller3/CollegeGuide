@@ -1,5 +1,4 @@
 $(document).ready(function() {
-  
   $("#College").select2({
     placeholder: "Select an Institution",
     allowClear: true

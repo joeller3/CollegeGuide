@@ -1,4 +1,5 @@
 <?
+include 'db.php';
 //query from db to populate these arrays 
 $ALUM_SCHOOLS = ['Brandeis University', 'Columbia University', 'New York City College', 'Brooklyn Manhattan Community College', 'Barnard College', 'Amherst College', 'Oberlin College' ];
 $REGIONS = ['Northeast', 'Midwest', 'South', 'West'];
@@ -6,16 +7,22 @@ $PROGRAMS = ['IAC', 'Goldman Sachs', 'IBM', 'Google', 'Twitter'];
 
 //example insertion
 //INSERT INTO `alumni` (`user_id`, `firstName`, `lastName`, `email`, `college_id`) VALUES (NULL, 'leah', 'gilliam', 'leah@gwc.com', '2');
-$required = ['firstname', 'lastname', 'email', 'college'];
-
+$required = ['firstname', 'lastname', 'email'];
 $query = "INSERT INTO 'alumni'(`user_id`, `firstName`, `lastName`, `email`, `college_id`) VALUES (NULL, ";
-
+$set = false;
 //look at each filter and add them to the query to be inserted into the db
 foreach ($required as $field){
 	if (isset($_POST[$field])){
-		//filter is an array here need to isolate and convert to a string
-		print_r ($_POST[$field]);		
+		$set = true;
+		$query .= "'".$_POST[$field]."'" . ', ';
 	}
+}
+$query .= '1)';
+
+//enter the alum data into db  
+if($set){
+	query($query);
+	echo 'query sent';
 }
 
 ?>
@@ -42,10 +49,6 @@ foreach ($required as $field){
       <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
       <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
-		<?
-			include 'db.php';
-		?>
-
   </head>
   <body>
     <!-- Navigation Bar -->

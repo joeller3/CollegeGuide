@@ -33,8 +33,6 @@ if ($_POST['colleges'] || $_POST['regions'] || $_POST['types'] || $_POST['progra
 	//}
 }
 ?>
-
-
 <html lang="en">
   <head>
     <meta charset="utf-8">
@@ -61,7 +59,6 @@ if ($_POST['colleges'] || $_POST['regions'] || $_POST['types'] || $_POST['progra
 		
 		<?
 			include 'db.php';
-
 		?>
   </head>
   <body>
@@ -101,7 +98,7 @@ if ($_POST['colleges'] || $_POST['regions'] || $_POST['types'] || $_POST['progra
         <form method="post">
           <div class="form-group"> 
             <label for="College">College</label>
-			<select multiple="multiple" name="colleges[]" class="input form-control" id="College" placeholder="Select an Institution">
+			<select multiple="multiple" name="colleges[]" class="input form-control" id="College">
 			<?
 				foreach ($ALUM_SCHOOLS as $school){
 					echo "<option value='$school'>$school</option>";
@@ -111,7 +108,7 @@ if ($_POST['colleges'] || $_POST['regions'] || $_POST['types'] || $_POST['progra
           </div>
           <div class="form-group">
             <label for="Region">Region</label>
-			<select multiple="multiple" name="regions[]" class="input form-control" id="Region" placeholder="Select a Region">
+			<select multiple="multiple" name="regions[]" class="input form-control" id="Region">
 				<?
 					foreach ($REGIONS as $region){
 						echo "<option value='$region'>$region</option>";
@@ -121,7 +118,7 @@ if ($_POST['colleges'] || $_POST['regions'] || $_POST['types'] || $_POST['progra
           </div>
           <div class="form-group">
             <label for="Program">GWC Program</label>
-            <select multiple="multiple" name="programs[]" class="input form-control" id="Program" placeholder="Select GWC Program or Club">
+            <select multiple="multiple" name="programs[]" class="input form-control" id="Program">
 							<?
 								foreach ($PROGRAMS as $program){
 									echo "<option value='$program'>$program</option>";
