@@ -1,5 +1,25 @@
 
      <?
+     
+     /*
+ *      SELECT college_id
+						FROM colleges
+						WHERE name = 'Brandeis University'
+                        OR
+                        name = 'Amherst College'
+                        OR 
+                        name = 'Elon University';
+                        
+SELECT firstName, lastName, email, name
+FROM alumni, colleges
+WHERE alumni.college_id = colleges.college_id;
+
+SELECT firstName, lastName, email, name
+FROM alumni, colleges
+WHERE alumni.college_id = colleges.college_id
+AND colleges.college_id = 2;
+       
+*/
     //PHP7 DB functions:
     //mysqli_fetch_array() - Fetch a result row as an associative, a numeric array, or both
     //mysqli_fetch_row() - Get a result row as an enumerated array
@@ -41,22 +61,9 @@
         //use to query the db 
         function query($query){
             global $link;
-            return mysqli_query($link, $query) or die ('Error updating database: '.mysqli_error($link));
+            return mysqli_query($link, $query); 
         }
         
-      /*  
-        $result = query("SELECT * FROM alumni");
-        
-        if ($result){
-            printf("Select returned %d rows.\n", mysqli_num_rows($result));
-            
-            /* fetch associative array 
-            while ($row = $result->fetch_assoc()) {
-                printf ("%s (%s)\n", $row["firstName"], $row["user_id"]);
-            }
-            mysqli_free_result($result);
-        }
-        */
         //$result->free();
         //$link->close();       
     ?>

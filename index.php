@@ -1,36 +1,66 @@
 <?
+include 'db.php';
 
 $ALUM_SCHOOLS = ['Brandeis University', 'Columbia University', 'New York City College', 'Brooklyn Manhattan Community College', 'Barnard College', 'Amherst College', 'Oberlin College' ];
 $REGIONS = ['Northeast', 'Midwest', 'South', 'West'];
 $PROGRAMS = ['IAC', 'Goldman Sachs', 'IBM', 'Google', 'Twitter'];
 
 //User input values 
-if ($_POST['colleges'] || $_POST['regions'] || $_POST['types'] || $_POST['programs']){
+if ($_POST['colleges']){
+		//|| $_POST['regions'] || $_POST['types'] || $_POST['programs']){
 		
 	$InputColleges = $_POST['colleges'];
-	$InputRegions = $_POST['regions'];
-	$InputTypes = $_POST['types'];
-	$InputPrograms = $_POST['programs'];
+	//$InputRegions = $_POST['regions'];
+	//$InputTypes = $_POST['types'];
+	//$InputPrograms = $_POST['programs'];
+
+	//get ids of selected colleges 
+	if(count($InputColleges) > 1){
+		$list_colleges = implode("' OR name = '",$InputColleges);
+	}else{
+		$list_colleges =  $InputColleges[0];
+	}
+	$query = "SELECT college_id
+						FROM colleges
+						WHERE name = '$list_colleges';";
 	
-	print_r($InputColleges);
-	print_r($InputPrograms);
-	print_r($InputRegions);
-	print_r($InputTypes);
-	//foreach ($InputColleges as $input){
-	//	echo $input;
-	//}
-	//
-	//foreach ($InputPrograms as $input){
-	//	echo "<p>$input</p>";
-	//}
-	//
-	//foreach ($InputRegions as $input){
-	//	echo "<p>$input</p>";
-	//}
-	//
-	//foreach ($InputTypes as $input){
-	//	echo "<p>$input</p>";
-	//}
+	$result = query($query);
+	
+	$query = "SELECT firstName, lastName, email, name
+						FROM alumni, colleges
+						WHERE ";
+						
+  if ($result){
+		$rows = mysqli_num_rows($result);
+    printf("Select returned %d rows.\n", $rows );
+    
+		$tmp = 1;        
+		while ($row = $result->fetch_assoc()) {
+			//array_push($collegeIds, $row["college_id"]);
+			
+			if ($tmp++ == $rows){
+					$query .=  "(alumni.college_id = colleges.college_id AND colleges.college_id = '$row[college_id]')";
+			}else{
+					$query .=  "(alumni.college_id = colleges.college_id AND colleges.college_id = '$row[college_id]') OR";
+			}
+		
+		}
+		mysqli_free_result($result);
+		$query .= ";";
+
+		//query for alumni at certain colleges
+		$result = query($query);
+	
+			if ($result){
+				printf("Select returned %d rows.\n", mysqli_num_rows($result));
+							
+				/* fetch associative array */
+				while ($row = $result->fetch_assoc()) {
+					printf ("\n %s %s %s \n", $row["firstName"], $row["lastName"], $row["name"]);
+				}
+				mysqli_free_result($result);
+			}
+	}
 }
 ?>
 <html lang="en">
@@ -56,10 +86,6 @@ if ($_POST['colleges'] || $_POST['regions'] || $_POST['types'] || $_POST['progra
       <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
       <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
-		
-		<?
-			include 'db.php';
-		?>
   </head>
   <body>
     <!-- Navigation Bar -->
