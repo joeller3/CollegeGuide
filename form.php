@@ -5,24 +5,14 @@ $ALUM_SCHOOLS = ['Brandeis University', 'Columbia University', 'New York City Co
 $REGIONS = ['Northeast', 'Midwest', 'South', 'West'];
 $PROGRAMS = ['IAC', 'Goldman Sachs', 'IBM', 'Google', 'Twitter'];
 
-//example insertion
-//INSERT INTO `alumni` (`user_id`, `firstName`, `lastName`, `email`, `college_id`) VALUES (NULL, 'leah', 'gilliam', 'leah@gwc.com', '2');
-$required = ['firstname', 'lastname', 'email'];
-$query = "INSERT INTO 'alumni'(`user_id`, `firstName`, `lastName`, `email`, `college_id`) VALUES (NULL, ";
-$set = false;
-//look at each filter and add them to the query to be inserted into the db
-foreach ($required as $field){
-	if (isset($_POST[$field])){
-		$set = true;
-		$query .= "'".$_POST[$field]."'" . ', ';
-	}
-}
-$query .= '1)';
-
-//enter the alum data into db  
-if($set){
+if (isset($_POST['firstname'])){
+		
+	$first = $_POST['firstname'];
+	$last = $_POST['lastname'];
+	$email = $_POST['email'];
+	
+	$query = "INSERT INTO `alumni` (`user_id`, `firstName`, `lastName`, `email`, `college_id`) VALUES (NULL, '$first', '$last', '$email','2')";
 	query($query);
-	echo 'query sent';
 }
 
 ?>

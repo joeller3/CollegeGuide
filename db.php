@@ -41,21 +41,22 @@
         //use to query the db 
         function query($query){
             global $link;
-            return mysqli_query($link, $query);
+            return mysqli_query($link, $query) or die ('Error updating database: '.mysqli_error($link));
         }
         
+      /*  
+        $result = query("SELECT * FROM alumni");
         
-        //$result = query("SELECT * FROM alumni");
-        //
-        //if ($result){
-        //    printf("Select returned %d rows.\n", mysqli_num_rows($result));
-        //    
-        //    /* fetch associative array */
-        //    while ($row = $result->fetch_assoc()) {
-        //        printf ("%s (%s)\n", $row["firstname"], $row["alumni_id"]);
-        //    }
-        //    mysqli_free_result($result);
-        //}
+        if ($result){
+            printf("Select returned %d rows.\n", mysqli_num_rows($result));
+            
+            /* fetch associative array 
+            while ($row = $result->fetch_assoc()) {
+                printf ("%s (%s)\n", $row["firstName"], $row["user_id"]);
+            }
+            mysqli_free_result($result);
+        }
+        */
         //$result->free();
         //$link->close();       
     ?>
