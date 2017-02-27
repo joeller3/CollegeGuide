@@ -21,6 +21,10 @@ $(document).ready(function() {
     allowClear: true
   });
   
+  
+  $("#directoryTable").DataTable();
+  
+  
   //submit button
   $("#SubmitBtn").click(function(){
     var region = document.getElementById("Region").value;

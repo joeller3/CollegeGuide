@@ -5,63 +5,80 @@ $ALUM_SCHOOLS = ['Brandeis University', 'Columbia University', 'New York City Co
 $REGIONS = ['Northeast', 'Midwest', 'South', 'West'];
 $PROGRAMS = ['IAC', 'Goldman Sachs', 'IBM', 'Google', 'Twitter'];
 
-//User input values 
-if ($_POST['colleges']){
+
+
+
+
+//--------------------------------------------------------------------
+//User input values
+
+function genTable(){
+	if ($_POST['colleges']){
 		//|| $_POST['regions'] || $_POST['types'] || $_POST['programs']){
-		
-	$InputColleges = $_POST['colleges'];
-	//$InputRegions = $_POST['regions'];
-	//$InputTypes = $_POST['types'];
-	//$InputPrograms = $_POST['programs'];
-
-	//get ids of selected colleges 
-	if(count($InputColleges) > 1){
-		$list_colleges = implode("' OR name = '",$InputColleges);
-	}else{
-		$list_colleges =  $InputColleges[0];
-	}
-	$query = "SELECT college_id
-						FROM colleges
-						WHERE name = '$list_colleges';";
-	
-	$result = query($query);
-	
-	$query = "SELECT firstName, lastName, email, name
-						FROM alumni, colleges
-						WHERE ";
-						
-  if ($result){
-		$rows = mysqli_num_rows($result);
-    printf("Select returned %d rows.\n", $rows );
-    
-		$tmp = 1;        
-		while ($row = $result->fetch_assoc()) {
-			//array_push($collegeIds, $row["college_id"]);
 			
-			if ($tmp++ == $rows){
-					$query .=  "(alumni.college_id = colleges.college_id AND colleges.college_id = '$row[college_id]')";
-			}else{
-					$query .=  "(alumni.college_id = colleges.college_id AND colleges.college_id = '$row[college_id]') OR";
-			}
-		
-		}
-		mysqli_free_result($result);
-		$query .= ";";
-
-		//query for alumni at certain colleges
-		$result = query($query);
+		$InputColleges = $_POST['colleges'];
+		//$InputRegions = $_POST['regions'];
+		//$InputTypes = $_POST['types'];
+		//$InputPrograms = $_POST['programs'];
 	
+		//get ids of selected colleges 
+		if(count($InputColleges) > 1){
+			$list_colleges = implode("' OR name = '",$InputColleges);
+		}else{
+			$list_colleges =  $InputColleges[0];
+		}
+		
+		$query = "SELECT college_id
+							FROM colleges
+							WHERE name = '$list_colleges';";
+		
+		$result = query($query);
+		
+		$query = "SELECT firstName, lastName, email, name
+							FROM alumni, colleges
+							WHERE ";
+							
+		if ($result) {
+			$rows = mysqli_num_rows($result);
+			printf("Select returned %d rows.\n", $rows );
+			
+			$tmp = 1;        
+			while ($row = $result->fetch_assoc()){
+				if ($tmp++ == $rows){
+						$query .=  "(alumni.college_id = colleges.college_id AND colleges.college_id = '$row[college_id]')";
+				}else{
+						$query .=  "(alumni.college_id = colleges.college_id AND colleges.college_id = '$row[college_id]') OR";
+				}
+			}
+			mysqli_free_result($result);
+			$query .= ";";
+	
+			//query for alumni at certain colleges
+			$result = query($query);
+		
 			if ($result){
 				printf("Select returned %d rows.\n", mysqli_num_rows($result));
 							
-				/* fetch associative array */
-				while ($row = $result->fetch_assoc()) {
-					printf ("\n %s %s %s \n", $row["firstName"], $row["lastName"], $row["name"]);
+				while ($row = $result->fetch_assoc()){
+					//printf ("\n %s %s %s \n", $row["firstName"], $row["lastName"], $row["name"]);
+					populateTable($row);
 				}
 				mysqli_free_result($result);
 			}
+		}
 	}
 }
+
+
+//populate table with results 
+function populateTable($row){
+	$first = $row['firstName'];
+	$last = $row['lastName'];
+	$college = $row['name'];
+	$email = $row['email'];
+	echo "<tr> <td>$college</td> <td>$first</td> <td>$last</td> <td>$email</td> <td>GWC Program/ Club</td> <td>LinkedIn</td> </tr>";
+}
+
 ?>
 <html lang="en">
   <head>
@@ -106,6 +123,7 @@ if ($_POST['colleges']){
             <li><a href="/map.php">College Map</a></li>
             <li><a href="/index.php">College Directory</a></li>
 						<li><a href="form.php">Form</a></li>
+						<li><a href="updatedb.php">db script</a></li>
           </ul>
         </div><!--/.nav-collapse -->
       </div>
@@ -169,28 +187,33 @@ if ($_POST['colleges']){
     
     <div class="container-fluid">
       <!--Table-->
-      <table class="table table-striped">
+      <table class="table table-striped" id="directoryTable">
         <thead class="thead-inverse">
           <tr>
+						<th>School</th>
             <th>First Name</th>
             <th>Last Name</th>
-            <th>School</th>
             <th>Email</th>
             <th>GWC Program/Club</th>
             <th>LinkedIn</th>
-            <th>Graduation Year</th>
           </tr>
         </thead>
         <tbody>
+					<?
+										
+					genTable();
+					
+					?>
+					<!--
           <tr>
+						<td>Brandeis University</td>
             <td>Joelle</td>
             <td>Robinson</td>
-            <td>Brandeis University</td>
             <td>joelle@email.com</td>
             <td>IAC 2013</td>
             <td>Joelle's linkedIn</td>
-            <td>2018</td>
           </tr>
+				-->
         </tbody>
       </table>
 		</div>
@@ -207,7 +230,10 @@ if ($_POST['colleges']){
 		<!-- Select 2-->
 		<link href="select2-4.0.3/dist/css/select2.min.css" rel="stylesheet" />
 		<script src="select2-4.0.3/dist/js/select2.min.js"></script>
-			
+		<!--Data Tables-->
+		<link href="DataTables-1.10.13/media/css/dataTables.bootstrap.css" rel="stylesheet"/>
+		<script src="DataTables-1.10.13/media/js/jquery.dataTables.js"></script>
+		<script src="DataTables-1.10.13/media/js/dataTables.bootstrap.js"></script>
 		<script src="alumni.js"></script>
   </body>
 </html>
