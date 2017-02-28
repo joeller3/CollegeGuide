@@ -55,10 +55,10 @@ if (isset($_POST['firstname'])){
         </div>
         <div id="navbar" class="collapse navbar-collapse">
           <ul class="nav navbar-nav">
-            <li class="active"><a href="/homepage.php">Home</a></li>
+            <li><a href="/homepage.php">Home</a></li>
             <li><a href="/map.php">College Map</a></li>
             <li><a href="/index.php">College Directory</a></li>
-						<li><a href="form.php">Form</a></li>
+			<li class="active"><a href="form.php">Form</a></li>
           </ul>
         </div><!--/.nav-collapse -->
       </div>

@@ -1,68 +1,140 @@
 <?
 include 'db.php';
 
-$ALUM_SCHOOLS = ['Brandeis University', 'Columbia University', 'New York City College', 'Brooklyn Manhattan Community College', 'Barnard College', 'Amherst College', 'Oberlin College' ];
-$REGIONS = ['Northeast', 'Midwest', 'South', 'West'];
+//retrieve colleges in db
+$query = "SELECT name FROM colleges ORDER BY name";
+$result = query($query);
+
+$ALUM_SCHOOLS = getResults($result, 'name');
+
+function getResults($result, $tag){
+	$data = array();
+	while ($row = $result->fetch_assoc()){
+		array_push($data, $row[$tag]);
+	}
+	mysqli_free_result($result);
+	return $data;
+}
+
+
+$REGIONS = ['New England', 'Mid East', 'Great Lakes', 'Plains', 'Southeast', 'Southwest', 'Rocky Mountains', 'Far West', 'Outlying Areas'];
+$STATES = ['CT', 'ME', 'MA', 'NH', 'RI', 'VT', 'DE', 'DC', 'MD', 'NJ', 'NY', 'PA', 'IL', 'IN', 'MI', 'OH', 'WI', 'IA', 'KS', 'MN', 'MO', 'NE', 'ND', 'SD',
+		   'AL', 'AR', 'FL', 'GA', 'KY', 'LA', 'MS', 'NC', 'SC', 'TN', 'VA', 'WV', 'AZ', 'NM', 'OK', 'TX', 'CO', 'ID', 'MT', 'UT', 'WY', 'AK', 'CA', 'HI', 'NV',
+		   'OR', 'WA', 'AS', 'FM', 'GU', 'MH', 'MP', 'PR', 'PW', 'VI'];
+/**
+ *1	New England (CT, ME, MA, NH, RI, VT)	 	 
+  2	Mid East (DE, DC, MD, NJ, NY, PA)	 	 
+  3	Great Lakes (IL, IN, MI, OH, WI)	 	 
+  4	Plains (IA, KS, MN, MO, NE, ND, SD)	 	 
+  5	Southeast (AL, AR, FL, GA, KY, LA, MS, NC, SC, TN, VA, WV)	 	 
+  6	Southwest (AZ, NM, OK, TX)	 	 
+  7	Rocky Mountains (CO, ID, MT, UT, WY)	 	 
+  8	Far West (AK, CA, HI, NV, OR, WA)	 	 
+  9	Outlying Areas (AS, FM, GU, MH, MP, PR, PW, VI)	 	 **/
+
 $PROGRAMS = ['IAC', 'Goldman Sachs', 'IBM', 'Google', 'Twitter'];
 
 //--------------------------------------------------------------------
-//User input values
-
 function genTable(){
-	if (isset($_POST['colleges'])){
-		//|| $_POST['regions'] || $_POST['types'] || $_POST['programs']){
-			
-		$InputColleges = $_POST['colleges'];
-		//$InputRegions = $_POST['regions'];
-		//$InputTypes = $_POST['types'];
-		//$InputPrograms = $_POST['programs'];
+	$collegeFilter = $typeFilter = $programFilter = $regionFilter = '';
 	
-		//get ids of selected colleges 
-		if(count($InputColleges) > 1){
-			$list_colleges = implode("' OR name = '",$InputColleges);
-		}else{
-			$list_colleges =  $InputColleges[0];
-		}
+	$flags = [false, false, false, false];
+	$count = 0;
+	
+	$query = "SELECT firstName, lastName, email, program, name FROM alumni, colleges WHERE ";
+
+	if (isset($_POST['colleges'])) {
 		
-		$query = "SELECT college_id
+		$input = $_POST['colleges'];
+		
+		//get ids of selected colleges 
+		if(count($input) > 1){
+			$list_colleges = implode("' OR name = '",$input);
+		}else{
+			$list_colleges =  $input[0];
+		}
+		//query for college ids to relate to college names 
+		$collegeFilter = "SELECT college_id
 							FROM colleges
 							WHERE name = '$list_colleges';";
+		$result = query($collegeFilter);
 		
-		$result = query($query);
-		
-		$query = "SELECT firstName, lastName, email, name
-							FROM alumni, colleges
-							WHERE ";
-							
+		$collegeFilter = '';
+
 		if ($result) {
 			$rows = mysqli_num_rows($result);
-			printf("Select returned %d rows.\n", $rows );
-			
 			$tmp = 1;        
 			while ($row = $result->fetch_assoc()){
 				if ($tmp++ == $rows){
-						$query .=  "(alumni.college_id = colleges.college_id AND colleges.college_id = '$row[college_id]')";
+						$collegeFilter .=  "(alumni.college_id = colleges.college_id AND colleges.college_id = '$row[college_id]') ";
 				}else{
-						$query .=  "(alumni.college_id = colleges.college_id AND colleges.college_id = '$row[college_id]') OR";
+						$collegeFilter .=  "(alumni.college_id = colleges.college_id AND colleges.college_id = '$row[college_id]') OR ";
 				}
 			}
 			mysqli_free_result($result);
-			$query .= ";";
-	
-			//query for alumni at certain colleges
-			$result = query($query);
-		
-			if ($result){
-				printf("Select returned %d rows.\n", mysqli_num_rows($result));
-							
-				while ($row = $result->fetch_assoc()){
-					//printf ("\n %s %s %s \n", $row["firstName"], $row["lastName"], $row["name"]);
-					populateTable($row);
-				}
-				mysqli_free_result($result);
-			}
+			$flags[0] = true;
+			$count++; 
 		}
 	}
+	
+	
+	
+	if (isset($_POST['types'])){
+		if((count($_POST['types']) > 1)){
+			$typeFilter = " (colleges.highest_degree = 2) OR (colleges.highest_degree = 4) ";
+		}else{
+			$typeFilter = " (colleges.highest_degree = '". $_POST['types'][0]. "') ";
+		}
+		
+		$flags[1] = true;
+		$count++; 
+	}
+	
+	//(isset($_POST['programs']) ? $programFilter = " (alumni.program = '".$_POST['programs'][0] . "' ) " : $programFilter = '');
+	
+	if (isset($_POST['programs'])){
+		$programFilter = " (alumni.program = '".$_POST['programs'][0] . "' ) ";
+		$flags[2] = true;
+		$count++;
+	}
+	
+	//(isset($_POST['regions']) ? $regionFilter = " (colleges.region = '". $_POST['regions'][0]."' ) " : $regionFilter = '');
+	
+	if (isset($_POST['regions'])){
+		$regionFilter = " (colleges.region = '". $_POST['regions'][0]."' ) ";
+		$flags[3] = true;
+		$count++; 
+	}
+	
+	
+	$filters = [$collegeFilter, $typeFilter, $programFilter, $regionFilter];
+	$first = $count;
+	
+	//concatenate filters into query
+	for ($i = 0; $i < 4 ; $i++){
+		if ($flags[$i]){
+			if($count == $first || ($count == $first && $count == 1) ){
+				$query .= $filters[$i];
+				$count--;
+			}else if ($count > 0){
+				//not first
+				$query = $query . " AND " . $filters[$i];
+				$count--;
+			}
+			
+		}
+	}
+	
+	
+	$result = query($query);
+	if ($result){
+		while ($row = $result->fetch_assoc()){
+			populateTable($row);
+		}
+	}
+	
+	
+	echo $query;
 }
 
 
@@ -72,7 +144,8 @@ function populateTable($row){
 	$last = $row['lastName'];
 	$college = $row['name'];
 	$email = $row['email'];
-	echo "<tr> <td>$college</td> <td>$first</td> <td>$last</td> <td>$email</td> <td>GWC Program/ Club</td> <td>LinkedIn</td> </tr>";
+	$program = $row['program'];
+	echo "<tr> <td>$college</td> <td>$first</td> <td>$last</td> <td>$email</td> <td>$program</td> <td>LinkedIn</td> </tr>";
 }
 
 ?>
@@ -118,8 +191,8 @@ function populateTable($row){
             <li><a href="/homepage.php">Home</a></li>
             <li><a href="/map.php">College Map</a></li>
             <li class="active"><a href="/index.php">College Directory</a></li>
-						<li><a href="form.php">Form</a></li>
-						<li><a href="updatedb.php">db script</a></li>
+			<li><a href="form.php">Form</a></li>
+			<li><a href="updatedb.php">db script</a></li>
           </ul>
         </div><!--/.nav-collapse -->
       </div>
@@ -158,7 +231,7 @@ function populateTable($row){
           </div>
           <div class="form-group">
             <label for="Program">GWC Program</label>
-            <select multiple="multiple" name="programs[]" class="input form-control" id="Program">
+            <select name="programs[]" class="input form-control" id="Program"> <!-- changed to a single program-->
 							<?
 								foreach ($PROGRAMS as $program){
 									echo "<option value='$program'>$program</option>";
@@ -168,9 +241,9 @@ function populateTable($row){
           </div>
           <div class="form-group">
             <label for="InstitutionType">Institution Type</label>
-            <select multiple="multiple" name="types" class="input form-control" id="CollegeType">
-              <option value="4yr">4-year College/ University</option>
-              <option value="2yr">2-year College</option>
+            <select multiple="multiple" name="types[]" class="input form-control" id="CollegeType">
+              <option value="4">4-year Bachelor's Degree</option>
+              <option value="2">2-year Associate's Degree</option>
             </select>
           </div>
           <button type="submit" class="btn btn-primary" id="SubmitBtn" >Submit</button>
@@ -195,10 +268,10 @@ function populateTable($row){
           </tr>
         </thead>
         <tbody>
-					<?
-					//generate table upon user entering filters
-					genTable();
-					?>
+		<?
+			//generate table upon user entering filters
+			genTable();
+		?>
         </tbody>
       </table>
 		</div>

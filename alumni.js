@@ -13,7 +13,7 @@ $(document).ready(function() {
   
   $("#Program").select2({
     placeholder: "Select a Girls Who Code Program or Club",
-    alllowClear: true
+    allowClear: true
   });
   
   $("#CollegeType").select2({
