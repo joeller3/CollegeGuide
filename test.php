@@ -7,6 +7,10 @@ $result = query($query);
 
 $ALUM_SCHOOLS = getResults($result, 'name');
 
+
+/** TODO : MAKE THIS INTO A FUNCTION IN DB.PHP FOR UNIVERSAL USE
+	UTILIZE WITH QUERY FUNCTION AND OUTPUT AN ARRAY OF ANS
+**/
 function getResults($result, $tag){
 	$data = array();
 	while ($row = $result->fetch_assoc()){
@@ -18,9 +22,9 @@ function getResults($result, $tag){
 
 
 $REGIONS = ['New England', 'Mid East', 'Great Lakes', 'Plains', 'Southeast', 'Southwest', 'Rocky Mountains', 'Far West', 'Outlying Areas'];
-$STATES = ['CT', 'ME', 'MA', 'NH', 'RI', 'VT', 'DE', 'DC', 'MD', 'NJ', 'NY', 'PA', 'IL', 'IN', 'MI', 'OH', 'WI', 'IA', 'KS', 'MN', 'MO', 'NE', 'ND', 'SD',
+/**$STATES = ['CT', 'ME', 'MA', 'NH', 'RI', 'VT', 'DE', 'DC', 'MD', 'NJ', 'NY', 'PA', 'IL', 'IN', 'MI', 'OH', 'WI', 'IA', 'KS', 'MN', 'MO', 'NE', 'ND', 'SD',
 		   'AL', 'AR', 'FL', 'GA', 'KY', 'LA', 'MS', 'NC', 'SC', 'TN', 'VA', 'WV', 'AZ', 'NM', 'OK', 'TX', 'CO', 'ID', 'MT', 'UT', 'WY', 'AK', 'CA', 'HI', 'NV',
-		   'OR', 'WA', 'AS', 'FM', 'GU', 'MH', 'MP', 'PR', 'PW', 'VI'];
+		   'OR', 'WA', 'AS', 'FM', 'GU', 'MH', 'MP', 'PR', 'PW', 'VI']; **/
 /**
  *1	New England (CT, ME, MA, NH, RI, VT)	 	 
   2	Mid East (DE, DC, MD, NJ, NY, PA)	 	 
@@ -43,6 +47,7 @@ function genTable(){
 	
 	$query = "SELECT firstName, lastName, email, program, name FROM alumni, colleges WHERE ";
 
+	//college filter
 	if (isset($_POST['colleges'])) {
 		
 		$input = $_POST['colleges'];
@@ -78,7 +83,7 @@ function genTable(){
 	}
 	
 	
-	
+	//institution type filter
 	if (isset($_POST['types'])){
 		if((count($_POST['types']) > 1)){
 			$typeFilter = " (colleges.highest_degree = 2) OR (colleges.highest_degree = 4) ";
@@ -92,6 +97,7 @@ function genTable(){
 	
 	//(isset($_POST['programs']) ? $programFilter = " (alumni.program = '".$_POST['programs'][0] . "' ) " : $programFilter = '');
 	
+	//GWC program and club filter
 	if (isset($_POST['programs'])){
 		$programFilter = " (alumni.program = '".$_POST['programs'][0] . "' ) ";
 		$flags[2] = true;
@@ -100,6 +106,7 @@ function genTable(){
 	
 	//(isset($_POST['regions']) ? $regionFilter = " (colleges.region = '". $_POST['regions'][0]."' ) " : $regionFilter = '');
 	
+	//region filter 
 	if (isset($_POST['regions'])){
 		$regionFilter = " (colleges.region = '". $_POST['regions'][0]."' ) ";
 		$flags[3] = true;
@@ -132,9 +139,6 @@ function genTable(){
 			populateTable($row);
 		}
 	}
-	
-	
-	echo $query;
 }
 
 
