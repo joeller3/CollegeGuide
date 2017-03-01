@@ -7,42 +7,29 @@ include 'db.php';
 
 //retrieve colleges in db
 $query = "SELECT name FROM colleges ORDER BY name";
-$result = query($query);
-
-$ALUM_SCHOOLS = getResults($result, 'name');
-
-
-/** TODO : MAKE THIS INTO A FUNCTION IN DB.PHP FOR UNIVERSAL USE
-	UTILIZE WITH QUERY FUNCTION AND OUTPUT AN ARRAY OF ANS
-**/
-function getResults($result, $tag){
-	$data = array();
-	while ($row = $result->fetch_assoc()){
-		array_push($data, $row[$tag]);
-	}
-	mysqli_free_result($result);
-	return $data;
+$result = testQuery($query);
+$ALUM_SCHOOLS = array();
+foreach ($result as $row){
+	array_push($ALUM_SCHOOLS, $row[0]);
 }
 
-
 $REGIONS = ['New England', 'Mid East', 'Great Lakes', 'Plains', 'Southeast', 'Southwest', 'Rocky Mountains', 'Far West', 'Outlying Areas'];
-
 $PROGRAMS = ['IAC', 'Goldman Sachs', 'IBM', 'Google', 'Twitter'];
-
-//--------------------------------------------------------------------
+/**
+ *generates table with alumni data. If no user input given
+ *via form (i.e. upon page load) the table
+ *displays all alumni and their respective colleges
+ **/
 function genTable(){
 	$collegeFilter = $typeFilter = $programFilter = $regionFilter = '';
-	
+	//used to distinguish between filters for query
 	$flags = [false, false, false, false];
 	$count = 0;
-	
 	$query = "SELECT firstName, lastName, email, program, name FROM alumni, colleges WHERE (alumni.college_id = colleges.college_id) AND ";
 
 	//college filter
 	if (isset($_POST['colleges'])) {
-		
 		$input = $_POST['colleges'];
-		
 		//get ids of selected colleges 
 		if(count($input) > 1){
 			$list_colleges = implode("' OR name = '",$input);
@@ -53,24 +40,20 @@ function genTable(){
 		$collegeFilter = "SELECT college_id
 							FROM colleges
 							WHERE name = '$list_colleges';";
-		$result = query($collegeFilter);
+		$result = testQuery($collegeFilter);
 		
 		$collegeFilter = '';
-
-		if ($result) {
-			$rows = mysqli_num_rows($result);
-			$tmp = 1;        
-			while ($row = $result->fetch_assoc()){
-				if ($tmp++ == $rows){
-						$collegeFilter .=  " (colleges.college_id = '$row[college_id]') ";
-				}else{
-						$collegeFilter .=  " (colleges.college_id = '$row[college_id]') OR ";
-				}
+		$numOfRows = count($result);
+		foreach ($result as $row){
+			$id = $row[0];
+			if ($numOfRows-- == 1){
+				$collegeFilter .= " (colleges.college_id = '$id') ";
+			}else{
+				$collegeFilter .=  " (colleges.college_id = '$id') OR ";
 			}
-			mysqli_free_result($result);
-			$flags[0] = true;
-			$count++; 
 		}
+		$flags[0] = true;
+		$count++;
 	}
 	
 	//institution type filter
@@ -80,7 +63,6 @@ function genTable(){
 		}else{
 			$typeFilter = " (colleges.highest_degree = '". $_POST['types'][0]. "') ";
 		}
-		
 		$flags[1] = true;
 		$count++; 
 	}
@@ -93,19 +75,19 @@ function genTable(){
 	}
 	
 	//region filter 
-	if (isset($_POST['regions'])){
+	if (isset($_POST['region'])){
 		$regionFilter = " (colleges.region = '". $_POST['regions'][0]."' ) ";
 		$flags[3] = true;
 		$count++; 
 	}
 	
-	$filters = [$collegeFilter, $typeFilter, $programFilter, $regionFilter];
+	$filters = ["($collegeFilter)", "($typeFilter)", $programFilter, $regionFilter];
 	$first = $count;
 	$isquery = false;
 	//concatenate filters into query
-	for ($i = 0; $i < 4 ; $i++){
+	for ($i = 0; $i < 4; $i++){
 		if ($flags[$i]){
-			if($count == $first || ($count == $first && $count == 1) ){
+			if($count == $first || ($count == $first && $count == 1) ){ 
 				$query .= $filters[$i];
 				$count--;
 			}else if ($count > 0){
@@ -116,37 +98,26 @@ function genTable(){
 			$isquery = true;
 		}
 	}
-	
-	if ($isquery){
-		$result = query($query);
-		if ($result){
-			while ($row = $result->fetch_assoc()){
-				populateTable($row);
-			}
-		}
-	}else {
+	if ($isquery){ //query db with user inputs
+		$result = testQuery($query);
+		populateTable($result);
+	}else { //query db for all alumni and their respective schools
 		$query = 'SELECT firstName, lastName, email, program, name FROM alumni, colleges WHERE (alumni.college_id = colleges.college_id) ORDER BY name';
-			$result = query($query);
-		if ($result){
-			while ($row = $result->fetch_assoc()){
-				populateTable($row);
-			}
-		}
+		$result = testQuery($query);
+		populateTable($result);		
 	}
-	
 }
-
-
 //populate table with results 
-function populateTable($row){
-	$first = $row['firstName'];
-	$last = $row['lastName'];
-	$college = $row['name'];
-	$email = $row['email'];
-	$program = $row['program'];
-	echo "<tr> <td>$college</td> <td>$first</td> <td>$last</td> <td>$email</td> <td>$program</td> <td>LinkedIn</td> </tr>";
+function populateTable($result){
+	foreach ($result as $row){
+		$first = $row[0];
+		$last = $row[1];
+		$email = $row[2];
+		$program = $row[3];
+		$college = $row[4];
+		echo "<tr> <td>$college</td> <td>$first</td> <td>$last</td> <td>$email</td> <td>$program</td> <td>LinkedIn</td> </tr>";
+	}
 }
-
 ?>
 <html lang="en">
   <head>
@@ -220,7 +191,7 @@ function populateTable($row){
           </div>
           <div class="form-group">
             <label for="Region">Region</label>
-			<select multiple="multiple" name="regions[]" class="input form-control" id="Region">
+			<select name="region[]" class="input form-control" id="Region">
 				<?
 					foreach ($REGIONS as $region){
 						echo "<option value='$region'>$region</option>";
@@ -295,17 +266,17 @@ function populateTable($row){
 		<script src="alumni.js"></script>
 		<!--
 		<script src="//code.jquery.com/jquery-1.12.4.js"></script>
-		<script src="https://cdn.datatables.net/1.10.13/js/jquery.dataTables.min.js"></script>
-		<script src="https://cdn.datatables.net/buttons/1.2.4/js/dataTables.buttons.min.js"></script>	
-		<script src="//cdn.datatables.net/buttons/1.2.4/js/buttons.flash.min.js"></script>
-		<script src="//cdnjs.cloudflare.com/ajax/libs/jszip/2.5.0/jszip.min.js"></script>
+		<script src="DataTables-1.10.13/media/js/jquery.dataTables.min.js"></script>
+		<script src="DataTables-1.10.13/extensions/Buttons/js/dataTables.buttons.min.js"></script>	
+		<script src="DataTables-1.10.13/extensions/Buttons/js/buttons.flash.min.js"></script>
+		<script src="bootstrap-3.3-2.7/docs/assets/js/vendor/jszip.min.js"></script>
 		<script src="//cdn.rawgit.com/bpampuch/pdfmake/0.1.24/build/pdfmake.min.js"></script>
 		<script src="//cdn.rawgit.com/bpampuch/pdfmake/0.1.24/build/vfs_fonts.js"></script>
-		<script src="//cdn.datatables.net/buttons/1.2.4/js/buttons.html5.min.js"></script>
-		<script src="//cdn.datatables.net/buttons/1.2.4/js/buttons.print.min.js"></script>
+		<script src="DataTables-1.10.13/extensions/Buttons/js/buttons.html5.min.js"></script>
+		<script src="DataTables-1.10.13/extensions/Buttons/js/buttons.print.min.js"></script>
 
-		<link href="https://cdn.datatables.net/1.10.13/css/jquery.dataTables.min.css" rel="stylesheet"/>
-		<link href="https://cdn.datatables.net/buttons/1.2.4/css/buttons.dataTables.min.css" rel="stylesheet"/>
+		<link href="DataTables-1.10.13/media/css/jquery.dataTables.min.css" rel="stylesheet"/>
+		<link href="DataTables-1.10.13/extensions/Buttons/css/buttons.dataTables.min.css" rel="stylesheet"/>
 		
 		-->
 

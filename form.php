@@ -1,7 +1,14 @@
 <?
 include 'db.php';
-//query from db to populate these arrays 
-$ALUM_SCHOOLS = ['Brandeis University', 'Columbia University', 'New York City College', 'Brooklyn Manhattan Community College', 'Barnard College', 'Amherst College', 'Oberlin College' ];
+//query from db to populate these arrays
+//retrieve colleges in db
+$query = "SELECT name FROM colleges ORDER BY name";
+$result = testQuery($query);
+$ALUM_SCHOOLS = array();
+foreach ($result as $row){
+	array_push($ALUM_SCHOOLS, $row[0]);
+}
+
 $REGIONS = ['Northeast', 'Midwest', 'South', 'West'];
 $PROGRAMS = ['IAC', 'Goldman Sachs', 'IBM', 'Google', 'Twitter'];
 
@@ -10,8 +17,12 @@ if (isset($_POST['firstname'])){
 	$first = $_POST['firstname'];
 	$last = $_POST['lastname'];
 	$email = $_POST['email'];
-	
-	$query = "INSERT INTO `alumni` (`user_id`, `firstName`, `lastName`, `email`, `college_id`) VALUES (NULL, '$first', '$last', '$email','2')";
+	$school = $_POST['college'][0];
+         
+	$collegeFilter = "SELECT college_id FROM colleges WHERE name = '$school';";
+    $result = testQuery($collegeFilter);
+	$collegeId = $result[0][0];
+	$query = "INSERT INTO `alumni` (`user_id`, `firstName`, `lastName`, `email`, `college_id`) VALUES (NULL, '$first', '$last', '$email','$collegeId')";
 	query($query);
 }
 
@@ -80,8 +91,16 @@ if (isset($_POST['firstname'])){
 				<label for="Email">Email Address</label>
 				<input name="email" class="form-control" type="text" id="Email">
 				
+				<label for="Program" class="col-2 col-form-label">GWC Program</label>
+				<select name="program[]" class="input form-control" id="Program">
+					<?
+						foreach ($PROGRAMS as $program){
+							echo "<option value='$program'>$program</option>";
+						}
+					?>
+				</select>
 				<label for="College" class="col-2 col-form-label">College</label>
-				<select name="college" class="input form-control" id="College">
+				<select name="college[]" class="input form-control" id="College">
 				<?
 					foreach ($ALUM_SCHOOLS as $school){
 						echo "<option value='$school'>$school</option>";

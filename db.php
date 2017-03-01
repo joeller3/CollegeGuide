@@ -33,5 +33,10 @@
         function query($query){
             global $link;
             return mysqli_query($link, $query); 
-        }   
+        }
+        
+        function testQuery($query){
+            global $link;
+            return (mysqli_fetch_all(mysqli_query($link, $query)));
+        }
     ?>
