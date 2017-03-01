@@ -3,7 +3,6 @@
  *@author Joelle Robinson <joelle.robinson@girlswhocode.com>
  *Girls Who Code  ESI
  **/
-
 include 'db.php';
 
 //retrieve colleges in db
@@ -74,7 +73,6 @@ function genTable(){
 		}
 	}
 	
-	
 	//institution type filter
 	if (isset($_POST['types'])){
 		if((count($_POST['types']) > 1)){
@@ -87,16 +85,12 @@ function genTable(){
 		$count++; 
 	}
 	
-	//(isset($_POST['programs']) ? $programFilter = " (alumni.program = '".$_POST['programs'][0] . "' ) " : $programFilter = '');
-	
 	//GWC program and club filter
 	if (isset($_POST['programs'])){
 		$programFilter = " (alumni.program = '".$_POST['programs'][0] . "' ) ";
 		$flags[2] = true;
 		$count++;
 	}
-	
-	//(isset($_POST['regions']) ? $regionFilter = " (colleges.region = '". $_POST['regions'][0]."' ) " : $regionFilter = '');
 	
 	//region filter 
 	if (isset($_POST['regions'])){
@@ -105,10 +99,9 @@ function genTable(){
 		$count++; 
 	}
 	
-	
 	$filters = [$collegeFilter, $typeFilter, $programFilter, $regionFilter];
 	$first = $count;
-	
+	$isquery = false;
 	//concatenate filters into query
 	for ($i = 0; $i < 4 ; $i++){
 		if ($flags[$i]){
@@ -120,17 +113,27 @@ function genTable(){
 				$query = $query . " AND " . $filters[$i];
 				$count--;
 			}
-			
+			$isquery = true;
 		}
 	}
 	
-	echo $query;
-	$result = query($query);
-	if ($result){
-		while ($row = $result->fetch_assoc()){
-			populateTable($row);
+	if ($isquery){
+		$result = query($query);
+		if ($result){
+			while ($row = $result->fetch_assoc()){
+				populateTable($row);
+			}
+		}
+	}else {
+		$query = 'SELECT firstName, lastName, email, program, name FROM alumni, colleges WHERE (alumni.college_id = colleges.college_id) ORDER BY name';
+			$result = query($query);
+		if ($result){
+			while ($row = $result->fetch_assoc()){
+				populateTable($row);
+			}
 		}
 	}
+	
 }
 
 
@@ -304,7 +307,7 @@ function populateTable($row){
 		<link href="https://cdn.datatables.net/1.10.13/css/jquery.dataTables.min.css" rel="stylesheet"/>
 		<link href="https://cdn.datatables.net/buttons/1.2.4/css/buttons.dataTables.min.css" rel="stylesheet"/>
 		
-		__>
+		-->
 
   </body>
 </html>
