@@ -7,7 +7,7 @@ include 'db.php';
 
 //retrieve colleges in db
 $query = "SELECT name FROM colleges ORDER BY name";
-$result = testQuery($query);
+$result = query($query);
 $ALUM_SCHOOLS = array();
 foreach ($result as $row){
 	array_push($ALUM_SCHOOLS, $row[0]);
@@ -40,7 +40,7 @@ function genTable(){
 		$collegeFilter = "SELECT college_id
 							FROM colleges
 							WHERE name = '$list_colleges';";
-		$result = testQuery($collegeFilter);
+		$result = query($collegeFilter);
 		
 		$collegeFilter = '';
 		$numOfRows = count($result);
@@ -76,7 +76,7 @@ function genTable(){
 	
 	//region filter 
 	if (isset($_POST['region'])){
-		$regionFilter = " (colleges.region = '". $_POST['regions'][0]."' ) ";
+		$regionFilter = " (colleges.region = '". $_POST['region'][0]."' ) ";
 		$flags[3] = true;
 		$count++; 
 	}
@@ -99,11 +99,11 @@ function genTable(){
 		}
 	}
 	if ($isquery){ //query db with user inputs
-		$result = testQuery($query);
+		$result = query($query);
 		populateTable($result);
 	}else { //query db for all alumni and their respective schools
 		$query = 'SELECT firstName, lastName, email, program, name FROM alumni, colleges WHERE (alumni.college_id = colleges.college_id) ORDER BY name';
-		$result = testQuery($query);
+		$result = query($query);
 		populateTable($result);		
 	}
 }
