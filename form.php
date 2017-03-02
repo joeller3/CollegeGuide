@@ -3,13 +3,13 @@ include 'db.php';
 //query from db to populate these arrays
 //retrieve colleges in db
 $query = "SELECT name FROM colleges ORDER BY name";
-$result = testQuery($query);
+$result = query($query);
 $ALUM_SCHOOLS = array();
 foreach ($result as $row){
 	array_push($ALUM_SCHOOLS, $row[0]);
 }
 
-$REGIONS = ['Northeast', 'Midwest', 'South', 'West'];
+$REGIONS = ['New England', 'Mid East', 'Great Lakes', 'Plains', 'Southeast', 'Southwest', 'Rocky Mountains', 'Far West', 'Outlying Areas'];
 $PROGRAMS = ['IAC', 'Goldman Sachs', 'IBM', 'Google', 'Twitter'];
 
 if (isset($_POST['firstname'])){
@@ -18,12 +18,16 @@ if (isset($_POST['firstname'])){
 	$last = $_POST['lastname'];
 	$email = $_POST['email'];
 	$school = $_POST['college'][0];
+	$program = $_POST['program'];
+	$linkedin = $_POST['linkedin'];
          
 	$collegeFilter = "SELECT college_id FROM colleges WHERE name = '$school';";
-    $result = testQuery($collegeFilter);
+    $result = query($collegeFilter);
 	$collegeId = $result[0][0];
-	$query = "INSERT INTO `alumni` (`user_id`, `firstName`, `lastName`, `email`, `college_id`) VALUES (NULL, '$first', '$last', '$email','$collegeId')";
-	query($query);
+	$query = "INSERT INTO `alumni` (`user_id`, `firstName`, `lastName`, `email`, `program`, `linkedin`, `college_id`) VALUES (NULL, '$first', '$last', '$email', NULL, '$linkedin', '$collegeId')";
+	echo $query;
+	
+	//query($query);
 }
 
 ?>
@@ -77,11 +81,10 @@ if (isset($_POST['firstname'])){
     
 	<!--Form-->
     <div class="container">
-			<div class="starter-template">
-        <h1>College Directory</h1>
-      </div>
-      <!-- Form -->
-			<!-- query db and get the list of colleges that are present then use data as options for a selection (only one choice allowed) -->     
+		<div class="starter-template">
+			<h1>College Directory</h1>
+		</div>
+      <!-- Form -->  
 		 <form method="post">
 			<div class="form-group">
 				<label for="FirstName"> First Name </label>
@@ -90,6 +93,8 @@ if (isset($_POST['firstname'])){
 				<input name="lastname" class="form-control" type="text" id="LastName">
 				<label for="Email">Email Address</label>
 				<input name="email" class="form-control" type="text" id="Email">
+				<label for="LinkedIn"> LinkedIn</label>
+				<input name="linkedin" class="form-control" type="text" id="LinkedIn">
 				
 				<label for="Program" class="col-2 col-form-label">GWC Program</label>
 				<select name="program[]" class="input form-control" id="Program">
