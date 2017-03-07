@@ -20,7 +20,7 @@
     <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
 	</head>
-  
+
   <body>
     <!-- Navigation Bar -->
     <nav class="navbar navbar-inverse navbar-fixed-top">
@@ -38,7 +38,7 @@
           <ul class="nav navbar-nav">
             <li class="active"><a href="/homepage.php">Home</a></li>
             <li><a href="/map.php">College Map</a></li>
-            <li><a href="/index.php">College Directory</a></li>
+            <li><a href="/secure.php">College Directory</a></li>
           </ul>
         </div><!--/.nav-collapse -->
       </div>
