@@ -1,7 +1,6 @@
 <?
 /**
- *@author Joelle Robinson <joelle.robinson@girlswhocode.com>
- *Girls Who Code  ESI
+@author Joelle Robinson <joelle.robinson@girlswhocode.com> Girls Who Code  ESI
  **/
 include 'db.php';
 
@@ -13,35 +12,40 @@ foreach ($result as $row){
 	array_push($ALUM_SCHOOLS, $row[0]);
 }
 
+$query = "SELECT program_name FROM programs ORDER BY program_name";
+$result = query($query);
+$PROGRAMS = array();
+foreach ($result as $row){
+	array_push($PROGRAMS, $row[0]);
+
+}
 $REGIONS = ['New England', 'Mid East', 'Great Lakes', 'Plains', 'Southeast', 'Southwest', 'Rocky Mountains', 'Far West', 'Outlying Areas'];
-$PROGRAMS = ['IAC', 'Goldman Sachs', 'IBM', 'Google', 'Twitter', 'CLUB'];
+
 /**
- *generates table with alumni data. If no user input given
- *via form (i.e. upon page load) the table
- *displays all alumni and their respective colleges
+generate table with alumni data. If no user input is given via the form (i.e. page load)
+the table displays all alumni and their respective schools
  **/
 function genTable(){
 	$collegeFilter = $typeFilter = $programFilter = $regionFilter = '';
-	
+
 	//used to distinguish between filters for query
 	$flags = [false, false, false, false];
 	$count = 0;
-	
-	$query = "SELECT name, firstName, lastName, email, program, linkedin FROM alumni INNER JOIN colleges ON alumni.college_id = colleges.college_id WHERE ";
-	
+
+	$query = "SELECT name, firstName, lastName, email, program_name, linkedin FROM alumni INNER JOIN colleges ON alumni.college_id = colleges.college_id INNER JOIN programs ON alumni.program_id = programs.program_id WHERE ";
+
 	//college filter
 	if (isset($_POST['colleges'])) {
 		$input = $_POST['colleges'];
-		//get ids of selected colleges 
 		if(count($input) > 1){
-			$list_colleges = "(colleges.name = '" . implode("' OR colleges.name = '",$input) . "')";
+			$collegeFilter = "(colleges.name = '" . implode("' OR colleges.name = '",$input) . "')";
 		}else{
-			$list_colleges =  $input[0];
+			$collegeFilter = "(colleges.name = '". $input[0] . "') ";
 		}
 		$flags[0] = true;
 		$count++;
 	}
-	
+
 	//institution type filter
 	if (isset($_POST['types'])){
 		if((count($_POST['types']) > 1)){
@@ -50,36 +54,41 @@ function genTable(){
 			$typeFilter = " (colleges.highest_degree = '". $_POST['types'][0]. "') ";
 		}
 		$flags[1] = true;
-		$count++; 
+		$count++;
 	}
-	
+
 	//GWC program and club filter
 	if (isset($_POST['programs'])){
-		$programFilter = " (alumni.program = '" . $_POST['programs'][0] . "' ) ";
+		$programs = $_POST['programs'];
+		print_r($programs);
+		if((count($programs) > 1)){
+			$programFilter = "(programs.program_name = '". implode ("' OR programs.program_name = '", $programs) . "')";
+		}else{
+			$programFilter = " (programs.program_name = '" . $programs[0] . "' ) ";
+		}
 		$flags[2] = true;
 		$count++;
 	}
-	
-	//region filter 
+
+	//region filter
 	if (isset($_POST['region'])){
 		$regions = $_POST['region'];
 		if (count($regions) > 1){
-		
 			$regionFilter = "(colleges.region = '". implode ("' OR colleges.region = '", $regions) . "')";
 		}else{
 			$regionFilter = " (colleges.region = '". $_POST['region'][0]."' ) ";
 		}
 		$flags[3] = true;
-		$count++; 
+		$count++;
 	}
-	
+
 	$filters = [$collegeFilter, "($typeFilter)", $programFilter, $regionFilter];
 	$first = $count;
 	$isquery = false;
 	//concatenate filters into query
 	for ($i = 0; $i < 4; $i++){
-		if ($flags[$i]){
-			if($count == $first || ($count == $first && $count == 1) ){ 
+		if ($flags[$i]){ //if there is user input at this filter
+			if($count == $first || ($count == $first && $count == 1) ){
 				$query .= $filters[$i];
 				$count--;
 			}else if ($count > 0){
@@ -90,19 +99,18 @@ function genTable(){
 			$isquery = true;
 		}
 	}
-	echo $query;
-	
+
 	if ($isquery){ //query db with user inputs
 		$result = query($query);
 		populateTable($result);
 	}else { //query db for all alumni and their respective schools
-		$query = "SELECT name, firstName, lastName, email, program, linkedin FROM alumni INNER JOIN colleges ON alumni.college_id = colleges.college_id";
+		$query  = 'SELECT name, firstName, lastName, email, program_name, linkedin FROM alumni INNER JOIN colleges ON alumni.college_id = colleges.college_id INNER JOIN programs ON alumni.program_id = programs.program_id';
 		$result = query($query);
-		populateTable($result);		
+		populateTable($result);
 	}
 }
-//populate table with results 
-function populateTable($result){	
+//populate table with results
+function populateTable($result){
 	foreach ($result as $row){
 		$college = $row[0];
 		$first = $row[1];
@@ -110,7 +118,7 @@ function populateTable($result){
 		$email = $row[3];
 		$program = $row[4];
 		$linkedin = $row[5];
-		echo "<tr> <td>$college</td> <td>$first</td> <td>$last</td> <td>$email</td> <td>$program</td> <td> <a href='$linkedin'>$linkedin</a></td> </tr>";
+		echo "<tr> <td>$college</td> <td>$first</td> <td>$last</td> <td>$email</td> <td>$program</td> <td><a href='$linkedin'>$linkedin</a></td> </tr>";
 	}
 }
 ?>
@@ -156,52 +164,52 @@ function populateTable($result){
             <li><a href="/homepage.php">Home</a></li>
             <li><a href="/map.php">College Map</a></li>
             <li class="active"><a href="/index.php">College Directory</a></li>
-			<li><a href="form.php">Form</a></li>
-			<li><a href="updatedb.php">db script</a></li>
+						<li><a href="form.php">Form</a></li>
+						<!-- <li><a href="updatedb.php">db script</a></li> -->
           </ul>
         </div><!--/.nav-collapse -->
       </div>
     </nav>
-    
+
 	<!--Form-->
     <div class="container">
-		
+
       <div class="starter-template">
         <h1>College Directory</h1>
       </div>
-      
-      <!-- Form --> 
+
+      <!-- Form -->
       <div class="container">
         <h2>Find Alumni</h2>
         <form method="post">
-          <div class="form-group"> 
-            <label for="College">College</label>
-			<select multiple="multiple" name="colleges[]" class="input form-control" id="College">
-			<?
-				foreach ($ALUM_SCHOOLS as $school){
-					echo "<option value='$school'>$school</option>";
-				}
-			?>
-			</select>
-          </div>
           <div class="form-group">
-            <label for="Region">Region</label>
-			<select multiple="multiple" name="region[]" class="input form-control" id="Region">
-			<?
-				foreach ($REGIONS as $region){
-					echo "<option value='$region'>$region</option>";
-				}
-			?>
-			</select>
+            <label for="College">College</label>
+						<select multiple="multiple" name="colleges[]" class="input form-control" id="College">
+							<?
+								foreach ($ALUM_SCHOOLS as $school){
+									echo "<option value='$school'>$school</option>";
+								}
+								?>
+						</select>
+        	</div>
+          <div class="form-group">
+          	<label for="Region">Region</label>
+						<select multiple="multiple" name="region[]" class="input form-control" id="Region">
+							<?
+								foreach ($REGIONS as $region){
+									echo "<option value='$region'>$region</option>";
+								}
+							?>
+						</select>
           </div>
           <div class="form-group">
             <label for="Program">GWC Program</label>
-            <select name="programs[]" class="input form-control" id="Program"> <!-- changed to a single program-->
-			<?
-				foreach ($PROGRAMS as $program){
-					echo "<option value='$program'>$program</option>";
-				}
-			?>
+            <select multiple="multiple" name="programs[]" class="input form-control" id="Program"> <!-- changed to a single program-->
+							<?
+								foreach ($PROGRAMS as $program){
+									echo "<option value='$program'>$program</option>";
+								}
+							?>
             </select>
           </div>
           <div class="form-group">
@@ -214,17 +222,17 @@ function populateTable($result){
           <button type="submit" class="btn btn-primary" id="SubmitBtn" >Submit</button>
         </form>
       </div><!-- /form -->
-      
+
     </div><!-- /.container -->
-   
-   <br></br> 
-    
+
+   <br></br>
+
     <div class="container-fluid">
       <!--Table-->
       <table class="table table-striped" id="directoryTable">
         <thead class="thead-inverse">
           <tr>
-			<th>School</th>
+						<th>School</th>
             <th>First Name</th>
             <th>Last Name</th>
             <th>Email</th>
@@ -233,13 +241,14 @@ function populateTable($result){
           </tr>
         </thead>
         <tbody>
-		<?
-			//generate table upon user entering filters
-			genTable();
-		?>
+					<?
+						//generate table upon user entering filters
+						//otherwise, generates table of all alumni in college
+						genTable();
+					?>
         </tbody>
       </table>
-	</div>	
+	</div>
     <!-- Bootstrap core JavaScript
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
@@ -247,11 +256,11 @@ function populateTable($result){
     <!--<script>window.jQuery || document.write('<script src="bootstrap-3.3.7-dist/js/tests/vendor/jquery.min.js"><\/script>')</script>-->
     <script src="bootstrap-3.3.7-dist/js/tests/vendor/bootstrap.min.js"></script>
     <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
-    <script src="bootstrap-3.3.7-dist/js/ie10-viewport-bug-workaround.js"></script>	
+    <script src="bootstrap-3.3.7-dist/js/ie10-viewport-bug-workaround.js"></script>
 	<!-- Select 2-->
 	<link href="select2-4.0.3/dist/css/select2.min.css" rel="stylesheet" />
 	<script src="select2-4.0.3/dist/js/select2.min.js"></script>
-		
+
 	<!--Data Tables-->
 	<link href="DataTables-1.10.13/media/css/dataTables.bootstrap.css" rel="stylesheet"/>
 	<script src="DataTables-1.10.13/media/js/jquery.dataTables.js"></script>
@@ -260,7 +269,7 @@ function populateTable($result){
 	<!--
 		<script src="//code.jquery.com/jquery-1.12.4.js"></script>
 		<script src="DataTables-1.10.13/media/js/jquery.dataTables.min.js"></script>
-		<script src="DataTables-1.10.13/extensions/Buttons/js/dataTables.buttons.min.js"></script>	
+		<script src="DataTables-1.10.13/extensions/Buttons/js/dataTables.buttons.min.js"></script>
 		<script src="DataTables-1.10.13/extensions/Buttons/js/buttons.flash.min.js"></script>
 		<script src="bootstrap-3.3-2.7/docs/assets/js/vendor/jszip.min.js"></script>
 		<script src="//cdn.rawgit.com/bpampuch/pdfmake/0.1.24/build/pdfmake.min.js"></script>
@@ -270,7 +279,7 @@ function populateTable($result){
 
 		<link href="DataTables-1.10.13/media/css/jquery.dataTables.min.css" rel="stylesheet"/>
 		<link href="DataTables-1.10.13/extensions/Buttons/css/buttons.dataTables.min.css" rel="stylesheet"/>
-		
+
 		-->
 
   </body>

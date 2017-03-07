@@ -20,7 +20,7 @@
     <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
 	</head>
-	
+  
   <body>
     <!-- Navigation Bar -->
     <nav class="navbar navbar-inverse navbar-fixed-top">
@@ -43,17 +43,17 @@
         </div><!--/.nav-collapse -->
       </div>
     </nav>
-    
+
 	<!--Form-->
     <div class="container">
       <div class="starter-template">
         <h1>College Map</h1>
-      </div>	
+      </div>
 			<!-- Map goes here ...-->
     </div><!-- /.container -->
-   
-   <br></br> 
-    
+
+   <br></br>
+
     <!-- Bootstrap core JavaScript
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->

@@ -8,26 +8,33 @@ $ALUM_SCHOOLS = array();
 foreach ($result as $row){
 	array_push($ALUM_SCHOOLS, $row[0]);
 }
+$query = "SELECT program_name FROM programs ORDER BY program_name";
+$result = query($query);
+$PROGRAMS = array();
+foreach ($result as $row){
+	array_push($PROGRAMS, $row[0]);
 
+}
 $REGIONS = ['New England', 'Mid East', 'Great Lakes', 'Plains', 'Southeast', 'Southwest', 'Rocky Mountains', 'Far West', 'Outlying Areas'];
-$PROGRAMS = ['IAC', 'Goldman Sachs', 'IBM', 'Google', 'Twitter'];
 
 if (isset($_POST['firstname'])){
-		
 	$first = $_POST['firstname'];
 	$last = $_POST['lastname'];
 	$email = $_POST['email'];
 	$school = $_POST['college'][0];
-	$program = $_POST['program'];
+	$program = $_POST['program'][0];
 	$linkedin = $_POST['linkedin'];
-         
-	$collegeFilter = "SELECT college_id FROM colleges WHERE name = '$school';";
-    $result = query($collegeFilter);
+
+	$query = "SELECT college_id FROM colleges WHERE name = '$school';";
+  $result = query($query);
 	$collegeId = $result[0][0];
-	$query = "INSERT INTO `alumni` (`user_id`, `firstName`, `lastName`, `email`, `program`, `linkedin`, `college_id`) VALUES (NULL, '$first', '$last', '$email', NULL, '$linkedin', '$collegeId')";
-	echo $query;
-	
-	//query($query);
+
+	$query = "SELECT program_id FROM programs WHERE program_name = '$program';";
+	$result = query($query);
+	$programId = $result[0][0];
+
+	$query = "INSERT INTO `alumni` (`user_id`, `firstName`, `lastName`, `email`, `program_id`, `linkedin`, `college_id`) VALUES (NULL, '$first', '$last', '$email', '$programId', '$linkedin', '$collegeId')";
+	insertQuery($query);
 }
 
 ?>
@@ -78,13 +85,13 @@ if (isset($_POST['firstname'])){
         </div><!--/.nav-collapse -->
       </div>
     </nav>
-    
+
 	<!--Form-->
     <div class="container">
 		<div class="starter-template">
-			<h1>College Directory</h1>
+			<h1>College Directory Form</h1>
 		</div>
-      <!-- Form -->  
+      <!-- Form -->
 		 <form method="post">
 			<div class="form-group">
 				<label for="FirstName"> First Name </label>
@@ -95,7 +102,7 @@ if (isset($_POST['firstname'])){
 				<input name="email" class="form-control" type="text" id="Email">
 				<label for="LinkedIn"> LinkedIn</label>
 				<input name="linkedin" class="form-control" type="text" id="LinkedIn">
-				
+
 				<label for="Program" class="col-2 col-form-label">GWC Program</label>
 				<select name="program[]" class="input form-control" id="Program">
 					<?
@@ -111,11 +118,11 @@ if (isset($_POST['firstname'])){
 						echo "<option value='$school'>$school</option>";
 					}
 				?>
-				</select>	
+				</select>
 				<br></br>
-				<button type="submit" class="btn btn-primary" id="FormBtn">Submit</button>		
+				<button type="submit" class="btn btn-primary" id="FormBtn">Submit</button>
 			</div>
-		 </form> 
+		 </form>
     </div><!-- /.container -->
 
    <!-- Bootstrap core JavaScript
@@ -124,11 +131,11 @@ if (isset($_POST['firstname'])){
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     <script src="bootstrap-3.3.7-dist/js/tests/vendor/bootstrap.min.js"></script>
     <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
-    <script src="bootstrap-3.3.7-dist/js/ie10-viewport-bug-workaround.js"></script>	
+    <script src="bootstrap-3.3.7-dist/js/ie10-viewport-bug-workaround.js"></script>
 		<!-- Select 2-->
 		<link href="select2-4.0.3/dist/css/select2.min.css" rel="stylesheet" />
 		<script src="select2-4.0.3/dist/js/select2.min.js"></script>
-			
+
 		<script src="form.js"></script>
   </body>
 </html>

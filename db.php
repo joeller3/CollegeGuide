@@ -3,12 +3,12 @@
 /**
 *Manages db connection and interaction
 **/
-     
-//debugging 
+
+//debugging
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
-        
+
 //connect to db
 $user = 'root';
 $password = 'root';
@@ -16,7 +16,7 @@ $db = 'alumni_test';
 $port = 8889;
 $host = 'localhost';
 $socket = 'localhost:/Applications/MAMP/tmp/mysql/mysql.sock';
-          
+
 $link = mysqli_connect(
    $host,
    $user,
@@ -31,19 +31,21 @@ if (!$link){
    echo "Debugging error: " . mysqli_connect_error() . PHP_EOL;
    exit;
 }
-        
-//use to query the db
-//@return 2d array of result set
+
+/**
+query db and pulls result set
+@return 2d array - result set
+**/
 function query($query){
    global $link;
-   $result = mysqli_query($link, $query);
-   if ($result){
-      return mysqli_fetch_all($result);
-   }else{
-      return "error";
-   }
-   
-   //error bool given 
+   return mysqli_fetch_all(mysqli_query($link, $query));
+}
+
+//insert into db
+//@return boolean - insertion success
+function insertQuery($query){
+   global $link;
+   return mysqli_query($link, $query);
 }
 
 ?>

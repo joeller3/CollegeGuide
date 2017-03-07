@@ -1,27 +1,27 @@
 $(document).ready(function() {
-    
-  //Form input values   
+
+  //Form input values
   $("#College").select2({
     placeholder: "Select an Institution",
     allowClear: true
   });
-  
+
   $("#Region").select2({
     placeholder: "Select a region",
     allowClear: true
   });
-  
+
   $("#Program").select2({
     placeholder: "Select a Girls Who Code Program or Club",
     allowClear: true
   });
-  
+
   $("#CollegeType").select2({
     placeholder: "Select a college type",
     allowClear: true
   });
-  
-  
+
+
   $("#directoryTable").DataTable(
     //{
     //  dom: 'Bfrtip',
@@ -30,14 +30,4 @@ $(document).ready(function() {
     //  ]
     //}
   );
-  
-  //submit button
-  $("#SubmitBtn").click(function(){
-    var region = document.getElementById("Region").value;
-    var college = document.getElementById("College").value;
-    var program = document.getElementById("Program").value;
-    var collegeType = document.getElementById("CollegeType").value;
-    
-    alert(region +" "+ college +" "+program +" "+ collegeType);
-  });
 });
