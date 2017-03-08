@@ -22,8 +22,8 @@ foreach ($result as $row){
 $REGIONS = ['New England', 'Mid East', 'Great Lakes', 'Plains', 'Southeast', 'Southwest', 'Rocky Mountains', 'Far West', 'Outlying Areas'];
 
 /**
-generate table with alumni data. If no user input is given via the form (i.e. page load)
-the table displays all alumni and their respective schools
+generate table with alumni data. If no user input is given via the form
+(i.e. page load) the table displays all alumni and their respective schools
  **/
 function genTable(){
 	$collegeFilter = $typeFilter = $programFilter = $regionFilter = '';

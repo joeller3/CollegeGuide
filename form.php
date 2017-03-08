@@ -2,7 +2,7 @@
 include 'db.php';
 //query from db to populate these arrays
 //retrieve colleges in db
-$query = "SELECT name FROM colleges ORDER BY name";
+$query  = 'SELECT Institution_Name FROM institutions ORDER BY Institution_Name';
 $result = query($query);
 $ALUM_SCHOOLS = array();
 foreach ($result as $row){
@@ -25,7 +25,7 @@ if (isset($_POST['firstname'])){
 	$program = $_POST['program'][0];
 	$linkedin = $_POST['linkedin'];
 
-	$query = "SELECT college_id FROM colleges WHERE name = '$school';";
+	$query = "SELECT Institution_ID FROM institutions WHERE Institution_Name = '$school';";
   $result = query($query);
 	$collegeId = $result[0][0];
 
@@ -95,16 +95,16 @@ if (isset($_POST['firstname'])){
 		 <form method="post">
 			<div class="form-group">
 				<label for="FirstName"> First Name </label>
-				<input name="firstname" class="form-control" type="text" id="FirstName" >
+				<input name="firstname" class="form-control" type="text" id="FirstName" required="required">
 				<label for="LastName">Last Name</label>
-				<input name="lastname" class="form-control" type="text" id="LastName">
+				<input name="lastname" class="form-control" type="text" id="LastName" required="required">
 				<label for="Email">Email Address</label>
-				<input name="email" class="form-control" type="text" id="Email">
+				<input name="email" class="form-control" type="text" id="Email" required="required">
 				<label for="LinkedIn"> LinkedIn</label>
 				<input name="linkedin" class="form-control" type="text" id="LinkedIn">
 
 				<label for="Program" class="col-2 col-form-label">GWC Program</label>
-				<select name="program[]" class="input form-control" id="Program">
+				<select name="program[]" class="form-control" id="Program">
 					<?
 						foreach ($PROGRAMS as $program){
 							echo "<option value='$program'>$program</option>";
