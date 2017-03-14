@@ -5,53 +5,63 @@
 include 'db.php';
 
 //retrieve colleges in db
-$query = "SELECT name FROM colleges ORDER BY name";
+$query = "SELECT Institution_Name FROM institutions ORDER BY Institution_Name";
 $result = query($query);
 $ALUM_SCHOOLS = array();
 foreach ($result as $row){
 	array_push($ALUM_SCHOOLS, $row[0]);
 }
-
+//retrieve programs from db
 $query = "SELECT program_name FROM programs ORDER BY program_name";
 $result = query($query);
 $PROGRAMS = array();
 foreach ($result as $row){
 	array_push($PROGRAMS, $row[0]);
-
 }
-$REGIONS = ['New England', 'Mid East', 'Great Lakes', 'Plains', 'Southeast', 'Southwest', 'Rocky Mountains', 'Far West', 'Outlying Areas'];
+//states for colleges
+$STATES = [
+	'AL', 'AK','AS','AZ','AR','CA', 'CO','CT','DE', 'DC', 'FL', 'GA','GU','HI','ID','IL','IN','IA','KS',
+	'KY','LA','ME','MD', 'MH', 'MA','MI','MN','MS','MO','MT','NE','NV','NH','NJ','NM','NY','NC','ND',
+	'OH','OK','OR','PA','PR','RI','SC','SD','TN','TX','UT','VT','VA','VI','WA','WV','WI','WY'
+];
 
 /**
 generate table with alumni data. If no user input is given via the form
 (i.e. page load) the table displays all alumni and their respective schools
  **/
 function genTable(){
-	$collegeFilter = $typeFilter = $programFilter = $regionFilter = '';
-
+	$institutionFilter = $typeFilter = $programFilter = $stateFilter = '';
 	//used to distinguish between filters for query
 	$flags = [false, false, false, false];
 	$count = 0;
 
-	$query = "SELECT name, firstName, lastName, email, program_name, linkedin FROM alumni INNER JOIN colleges ON alumni.college_id = colleges.college_id INNER JOIN programs ON alumni.program_id = programs.program_id WHERE ";
-
+	$query = 'SELECT institutions.Institution_Name, programs.program_name, firstName, lastName, email, linkedin FROM alums INNER JOIN institutions ON alums.Institution_ID = institutions.Institution_ID INNER JOIN programs ON alums.program_id = programs.program_id WHERE ';
 	//college filter
 	if (isset($_POST['colleges'])) {
-		$input = $_POST['colleges'];
-		if(count($input) > 1){
-			$collegeFilter = "(colleges.name = '" . implode("' OR colleges.name = '",$input) . "')";
+		$colleges = $_POST['colleges'];
+		if(count($colleges) > 1){
+			$institutionFilter = "(institutions.Institution_Name = '" . implode("' OR institutions.Institution_Name = '",$colleges) . "')";
 		}else{
-			$collegeFilter = "(colleges.name = '". $input[0] . "') ";
+			$institutionFilter = "(institutions.Institution_Name = '". $colleges[0] . "') ";
 		}
 		$flags[0] = true;
 		$count++;
 	}
 
 	//institution type filter
+	/**
+	Institutional – an accreditation type which normally applies to an entire institution, including freestanding single–purpose institutions. Typically can be used to establish eligibility to participate in Title IV programs.
+
+	Specialized – an accreditation type which normally applies to the evaluation of programs, departments, or schools which usually are parts of a total collegiate or other postsecondary institution.
+
+	Internship/Residency – an accreditation type which is granted to locations which provide
+	**/
+
 	if (isset($_POST['types'])){
 		if((count($_POST['types']) > 1)){
-			$typeFilter = " (colleges.highest_degree = 2) OR (colleges.highest_degree = 4) ";
+			$typeFilter = "(institutions.Accreditation_Type = '" . implode("' OR institutions.Accreditation_Type = '",$input) . "')";
 		}else{
-			$typeFilter = " (colleges.highest_degree = '". $_POST['types'][0]. "') ";
+			$typeFilter = " (institutions.Accreditation_Type = '". $_POST['types'][0]. "') ";
 		}
 		$flags[1] = true;
 		$count++;
@@ -60,8 +70,7 @@ function genTable(){
 	//GWC program and club filter
 	if (isset($_POST['programs'])){
 		$programs = $_POST['programs'];
-		print_r($programs);
-		if((count($programs) > 1)){
+		if((count($programs)) > 1){
 			$programFilter = "(programs.program_name = '". implode ("' OR programs.program_name = '", $programs) . "')";
 		}else{
 			$programFilter = " (programs.program_name = '" . $programs[0] . "' ) ";
@@ -70,19 +79,19 @@ function genTable(){
 		$count++;
 	}
 
-	//region filter
-	if (isset($_POST['region'])){
-		$regions = $_POST['region'];
-		if (count($regions) > 1){
-			$regionFilter = "(colleges.region = '". implode ("' OR colleges.region = '", $regions) . "')";
+	//states filter
+	if (isset($_POST['states'])){
+		$states = $_POST['states'];
+		if(count($states) > 1){
+			$stateFilter = "(institutions.Institution_State = '". implode ("' OR institutions.Institution_State = '", $states) . "')";
 		}else{
-			$regionFilter = " (colleges.region = '". $_POST['region'][0]."' ) ";
+			$stateFilter = "(institutions.Institution_State = '". $_POST['states'][0]."' )";
 		}
 		$flags[3] = true;
 		$count++;
 	}
 
-	$filters = [$collegeFilter, "($typeFilter)", $programFilter, $regionFilter];
+	$filters = [$institutionFilter, $typeFilter, $programFilter, $stateFilter];
 	$first = $count;
 	$isquery = false;
 	//concatenate filters into query
@@ -104,7 +113,7 @@ function genTable(){
 		$result = query($query);
 		populateTable($result);
 	}else { //query db for all alumni and their respective schools
-		$query  = 'SELECT name, firstName, lastName, email, program_name, linkedin FROM alumni INNER JOIN colleges ON alumni.college_id = colleges.college_id INNER JOIN programs ON alumni.program_id = programs.program_id';
+		$query = 'SELECT institutions.Institution_Name, programs.program_name, firstName, lastName, email, linkedin FROM alums INNER JOIN institutions ON alums.Institution_ID = institutions.Institution_ID INNER JOIN programs ON alums.program_id = programs.program_id';
 		$result = query($query);
 		populateTable($result);
 	}
@@ -189,19 +198,19 @@ function populateTable($result){
 								foreach ($ALUM_SCHOOLS as $school){
 									echo "<option value='$school'>$school</option>";
 								}
-								?>
-						</select>
-        	</div>
-          <div class="form-group">
-          	<label for="Region">Region</label>
-						<select multiple="multiple" name="region[]" class="input form-control" id="Region">
-							<?
-								foreach ($REGIONS as $region){
-									echo "<option value='$region'>$region</option>";
-								}
 							?>
 						</select>
-          </div>
+        	</div>
+					<div class="form-group">
+						<label for="State">State</label>
+						<select multiple="multiple" name="states[]" class="input form-control" id="State">
+						<?
+							foreach ($STATES as $state){
+								echo "<option value='$state'>$state</option>";
+							}
+						?>
+						</select>
+					</div>
           <div class="form-group">
             <label for="Program">GWC Program</label>
             <select multiple="multiple" name="programs[]" class="input form-control" id="Program"> <!-- changed to a single program-->
@@ -215,8 +224,11 @@ function populateTable($result){
           <div class="form-group">
             <label for="InstitutionType">Institution Type</label>
             <select multiple="multiple" name="types[]" class="input form-control" id="CollegeType">
-              <option value="4">4-year Bachelor's Degree</option>
-              <option value="2">2-year Associate's Degree</option>
+							<option value='Institutional'>Institutional</option>
+							<option value='Specialized'>Specialized</option>
+							<option value='Internship/Residency'>Internship/Residency</option>
+							<!--<option value="4">4-year Bachelor's Degree</option>
+              <option value="2">2-year Associate's Degree</option>-->
             </select>
           </div>
           <button type="submit" class="btn btn-primary" id="SubmitBtn" >Submit</button>
@@ -257,30 +269,22 @@ function populateTable($result){
     <script src="bootstrap-3.3.7-dist/js/tests/vendor/bootstrap.min.js"></script>
     <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
     <script src="bootstrap-3.3.7-dist/js/ie10-viewport-bug-workaround.js"></script>
-	<!-- Select 2-->
-	<link href="select2-4.0.3/dist/css/select2.min.css" rel="stylesheet" />
-	<script src="select2-4.0.3/dist/js/select2.min.js"></script>
+		<!-- Select 2-->
+		<link href="select2-4.0.3/dist/css/select2.min.css" rel="stylesheet" />
+		<script src="select2-4.0.3/dist/js/select2.min.js"></script>
 
-	<!--Data Tables-->
-	<link href="DataTables-1.10.13/media/css/dataTables.bootstrap.css" rel="stylesheet"/>
-	<script src="DataTables-1.10.13/media/js/jquery.dataTables.js"></script>
-	<script src="DataTables-1.10.13/media/js/dataTables.bootstrap.js"></script>
-	<script src="alumni.js"></script>
-	<!--
-		<script src="//code.jquery.com/jquery-1.12.4.js"></script>
+		<!--Data Tables /HTML Buttons-->
+		<link href="DataTables-1.10.13/media/css/dataTables.bootstrap.css" rel="stylesheet"/>
+		<link href="https://cdn.datatables.net/1.10.13/css/jquery.dataTables.min.css" rel="stylesheet"/>
+		<link href="https://cdn.datatables.net/buttons/1.2.4/css/buttons.dataTables.min.css" rel="stylesheet"/>
 		<script src="DataTables-1.10.13/media/js/jquery.dataTables.min.js"></script>
+		<script src="DataTables-1.10.13/media/js/jquery.dataTables.js"></script>
+		<script src="DataTables-1.10.13/media/js/dataTables.bootstrap.js"></script>
 		<script src="DataTables-1.10.13/extensions/Buttons/js/dataTables.buttons.min.js"></script>
-		<script src="DataTables-1.10.13/extensions/Buttons/js/buttons.flash.min.js"></script>
 		<script src="bootstrap-3.3-2.7/docs/assets/js/vendor/jszip.min.js"></script>
-		<script src="//cdn.rawgit.com/bpampuch/pdfmake/0.1.24/build/pdfmake.min.js"></script>
-		<script src="//cdn.rawgit.com/bpampuch/pdfmake/0.1.24/build/vfs_fonts.js"></script>
-		<script src="DataTables-1.10.13/extensions/Buttons/js/buttons.html5.min.js"></script>
-		<script src="DataTables-1.10.13/extensions/Buttons/js/buttons.print.min.js"></script>
-
-		<link href="DataTables-1.10.13/media/css/jquery.dataTables.min.css" rel="stylesheet"/>
-		<link href="DataTables-1.10.13/extensions/Buttons/css/buttons.dataTables.min.css" rel="stylesheet"/>
-
-		-->
-
+		<script src="https://cdn.rawgit.com/bpampuch/pdfmake/0.1.24/build/pdfmake.min.js"></script>
+		<script src="https://cdn.rawgit.com/bpampuch/pdfmake/0.1.24/build/vfs_fonts.js"></script>
+		<script src="https://cdn.datatables.net/buttons/1.2.4/js/buttons.html5.min.js"></script>
+		<script src="alumni.js"></script>
   </body>
 </html>

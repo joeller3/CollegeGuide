@@ -21,13 +21,23 @@ $(document).ready(function() {
     allowClear: true
   });
 
+  $("#State").select2({
+    placeholder: "Select a state",
+    allowClear: true
+  });
 
-  $("#directoryTable").DataTable(
-    //{
-    //  dom: 'Bfrtip',
-    //  buttons: [
-    //    'copy', 'csv', 'excel', 'pdf', 'print'
-    //  ]
-    //}
-  );
+  $("#directoryTable").DataTable({
+    dom: 'Bfrtip',
+    buttons: [
+      {
+        extend: 'copyHtml5',
+        exportOptions: {
+          columns: ':contains("Office")'
+        }
+      },
+        'excelHtml5',
+        'csvHtml5',
+        'pdfHtml5'
+    ]
+  } );
 });

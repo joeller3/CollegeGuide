@@ -15,8 +15,6 @@ foreach ($result as $row){
 	array_push($PROGRAMS, $row[0]);
 
 }
-$REGIONS = ['New England', 'Mid East', 'Great Lakes', 'Plains', 'Southeast', 'Southwest', 'Rocky Mountains', 'Far West', 'Outlying Areas'];
-
 if (isset($_POST['firstname'])){
 	$first = $_POST['firstname'];
 	$last = $_POST['lastname'];
@@ -33,7 +31,7 @@ if (isset($_POST['firstname'])){
 	$result = query($query);
 	$programId = $result[0][0];
 
-	$query = "INSERT INTO `alumni` (`user_id`, `firstName`, `lastName`, `email`, `program_id`, `linkedin`, `college_id`) VALUES (NULL, '$first', '$last', '$email', '$programId', '$linkedin', '$collegeId')";
+	$query  = "INSERT INTO `alums` (`alum_id`, `Institution_ID`, `program_id`, `firstName`, `lastName`, `email`, `linkedin`) VALUES (NULL, '$collegeId', '$programId', '$first', '$last', '$email', '$linkedin')";
 	insertQuery($query);
 }
 
