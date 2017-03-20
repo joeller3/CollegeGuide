@@ -32,7 +32,12 @@ if (isset($_POST['firstname'])){
 	$programId = $result[0][0];
 
 	$query  = "INSERT INTO `alums` (`alum_id`, `Institution_ID`, `program_id`, `firstName`, `lastName`, `email`, `linkedin`) VALUES (NULL, '$collegeId', '$programId', '$first', '$last', '$email', '$linkedin')";
-	insertQuery($query);
+	if(insertQuery($query)){
+		echo "<script type='text/javascript'>alert('Thank you! You have just been added Girls Who Code's College Directory!');</script>;";
+	}else{
+		echo "<script type='text/javascript'>alert('Something went wrong, please try again.');</script>;";
+	}
+
 }
 
 ?>
@@ -53,7 +58,7 @@ if (isset($_POST['firstname'])){
 
     <!-- Custom styles for this template -->
     <link href="bootstrap-3.3.7-dist/css/starter-template.css" rel="stylesheet">
-
+		<link href="example.css" rel="stylesheet">
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
       <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
@@ -61,28 +66,24 @@ if (isset($_POST['firstname'])){
     <![endif]-->
   </head>
   <body>
-    <!-- Navigation Bar -->
-    <nav class="navbar navbar-inverse navbar-fixed-top">
-      <div class="container">
-        <div class="navbar-header">
-          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-            <span class="sr-only">Toggle navigation</span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </button>
-          <a class="navbar-brand" href="/homepage.php">Girls Who Code</a>
-        </div>
-        <div id="navbar" class="collapse navbar-collapse">
-          <ul class="nav navbar-nav">
-            <li><a href="/homepage.php">Home</a></li>
-            <li><a href="/map.php">College Map</a></li>
-            <li><a href="/secure.php">College Directory</a></li>
-						<li class="active"><a href="form.php">Form</a></li>
-          </ul>
-        </div><!--/.nav-collapse -->
-      </div>
-    </nav>
+		<div class="header-top">
+			<nav class="row">
+				<ul>
+					<li>
+						<a href="https://girlswhocode.com/">
+							<img alt="Girls Who Code Logo" src="https://3zjc852t4swp1lmezl171oga-wpengine.netdna-ssl.com/wp-content/themes/girlswhocode/images/header-logo.png" >
+						</a>
+					</li>
+				<ul>
+			</nav>
+		</div><!--/header-top-->
+		<div class="header-bottom" style="background-image: url('https://3zjc852t4swp1lmezl171oga-wpengine.netdna-ssl.com/wp-content/uploads/2016/05/gwc_homepage-1170x580.jpg')">
+		</div><!--/header-bottom-->
+		<div class="header-call-to-action">
+			<div class="row text-center">
+				 Add yourself to the Collegiate Alumni Directory to be in community with your Girls Who Code sisters! Go to the <a href="/index.php" style="color: #ede813">directory</a> to start connecting!
+			</div>
+		</div>
 
 	<!--Form-->
     <div class="container">
@@ -102,7 +103,8 @@ if (isset($_POST['firstname'])){
 				<input name="linkedin" class="form-control" type="text" id="LinkedIn">
 
 				<label for="Program" class="col-2 col-form-label">GWC Program</label>
-				<select name="program[]" class="form-control" id="Program">
+				<select name="program[]" class="form-control" id="Program" placeholder="Select a GWC Program or Club" style="width:100%">
+					<option></option>
 					<?
 						foreach ($PROGRAMS as $program){
 							echo "<option value='$program'>$program</option>";
@@ -110,7 +112,8 @@ if (isset($_POST['firstname'])){
 					?>
 				</select>
 				<label for="College" class="col-2 col-form-label">College</label>
-				<select name="college[]" class="input form-control" id="College">
+				<select name="college[]" class="input form-control" id="College" style="width:100%">
+					<option></option>
 				<?
 					foreach ($ALUM_SCHOOLS as $school){
 						echo "<option value='$school'>$school</option>";
@@ -118,7 +121,7 @@ if (isset($_POST['firstname'])){
 				?>
 				</select>
 				<br></br>
-				<button type="submit" class="btn btn-primary" id="FormBtn">Submit</button>
+				<button type="submit" class="btn btn-primary" id="SubmitBtn" onclick="confirmation">Submit</button>
 			</div>
 		 </form>
     </div><!-- /.container -->

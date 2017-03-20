@@ -56,7 +56,6 @@ function genTable(){
 
 	Internship/Residency – an accreditation type which is granted to locations which provide
 	**/
-
 	if (isset($_POST['types'])){
 		if((count($_POST['types']) > 1)){
 			$typeFilter = "(institutions.Accreditation_Type = '" . implode("' OR institutions.Accreditation_Type = '",$input) . "')";
@@ -147,53 +146,45 @@ function populateTable($result){
     <link href="bootstrap-3.3.7-dist/css/bootstrap.min.css" rel="stylesheet">
 
     <!-- Custom styles for this template -->
-    <link href="bootstrap-3.3.7-dist/css/starter-template.css" rel="stylesheet">
+		<link href="bootstrap-3.3.7-dist/css/starter-template.css" rel="stylesheet">
 
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
     <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
     <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
+    <link href="example.css" rel="stylesheet">
   </head>
   <body>
-    <!-- Navigation Bar -->
-    <nav class="navbar navbar-inverse navbar-fixed-top">
-      <div class="container">
-        <div class="navbar-header">
-          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-            <span class="sr-only">Toggle navigation</span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </button>
-          <a class="navbar-brand" href="/homepage.php">Girls Who Code</a>
-        </div>
-        <div id="navbar" class="collapse navbar-collapse">
-          <ul class="nav navbar-nav">
-            <li><a href="/homepage.php">Home</a></li>
-            <li><a href="/map.php">College Map</a></li>
-            <li class="active"><a href="/index.php">College Directory</a></li>
-						<li><a href="form.php">Form</a></li>
-						<!-- <li><a href="updatedb.php">db script</a></li> -->
-          </ul>
-        </div><!--/.nav-collapse -->
-      </div>
-    </nav>
-
-	<!--Form-->
+		<div class="header-top">
+			<nav class="row">
+				<ul>
+					<li>
+						<a href="https://girlswhocode.com/">
+							<img alt="Girls Who Code Logo" src="https://3zjc852t4swp1lmezl171oga-wpengine.netdna-ssl.com/wp-content/themes/girlswhocode/images/header-logo.png" >
+						</a>
+					</li>
+				<ul>
+			</nav>
+		</div><!--/header-top-->
+		<div class="header-bottom" style="background-image: url('https://3zjc852t4swp1lmezl171oga-wpengine.netdna-ssl.com/wp-content/uploads/2016/05/gwc_homepage-1170x580.jpg')">
+		</div><!--/header-bottom-->
+		<div class="header-call-to-action">
+			<div class="row text-center">
+				Use this directory to find and connect with other Girls Who Code alumni in college. Join the community by adding yourself to the directory <a href="/form.php" style="color: #ede813">here</a>!
+			</div>
+		</div>
     <div class="container">
-
       <div class="starter-template">
-        <h1>College Directory</h1>
+        <h1>Collegiate Alumni Directory</h1>
       </div>
-
       <!-- Form -->
       <div class="container">
         <h2>Find Alumni</h2>
-        <form method="post">
-          <div class="form-group">
+        <form method="post" class="form">
+          <div class="form-group filter">
             <label for="College">College</label>
-						<select multiple="multiple" name="colleges[]" class="input form-control" id="College">
+						<select multiple="multiple" name="colleges[]" class="input form-control" id="College" style="width:100%">
 							<?
 								foreach ($ALUM_SCHOOLS as $school){
 									echo "<option value='$school'>$school</option>";
@@ -201,9 +192,9 @@ function populateTable($result){
 							?>
 						</select>
         	</div>
-					<div class="form-group">
+					<div class="form-group filter">
 						<label for="State">State</label>
-						<select multiple="multiple" name="states[]" class="input form-control" id="State">
+						<select multiple="multiple" name="states[]" class="input form-control" id="State" style="width:100%">
 						<?
 							foreach ($STATES as $state){
 								echo "<option value='$state'>$state</option>";
@@ -211,9 +202,9 @@ function populateTable($result){
 						?>
 						</select>
 					</div>
-          <div class="form-group">
+          <div class="form-group filter">
             <label for="Program">GWC Program</label>
-            <select multiple="multiple" name="programs[]" class="input form-control" id="Program"> <!-- changed to a single program-->
+            <select multiple="multiple" name="programs[]" class="input form-control" id="Program" style="width: 100%"> <!-- changed to a single program-->
 							<?
 								foreach ($PROGRAMS as $program){
 									echo "<option value='$program'>$program</option>";
@@ -221,17 +212,15 @@ function populateTable($result){
 							?>
             </select>
           </div>
-          <div class="form-group">
+          <div class="form-group filter">
             <label for="InstitutionType">Institution Type</label>
-            <select multiple="multiple" name="types[]" class="input form-control" id="CollegeType">
+            <select multiple="multiple" name="types[]" class="input form-control" id="CollegeType" style="width:100%">
 							<option value='Institutional'>Institutional</option>
 							<option value='Specialized'>Specialized</option>
 							<option value='Internship/Residency'>Internship/Residency</option>
-							<!--<option value="4">4-year Bachelor's Degree</option>
-              <option value="2">2-year Associate's Degree</option>-->
             </select>
           </div>
-          <button type="submit" class="btn btn-primary" id="SubmitBtn" >Submit</button>
+          <button type="submit" class="btn btn-primary" id="SubmitBtn"><span>Find Alumni</span></button>
         </form>
       </div><!-- /form -->
 

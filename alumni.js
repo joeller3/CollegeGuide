@@ -26,18 +26,11 @@ $(document).ready(function() {
     allowClear: true
   });
 
+  //table w/ query results + export button functionality
   $("#directoryTable").DataTable({
     dom: 'Bfrtip',
     buttons: [
-      {
-        extend: 'copyHtml5',
-        exportOptions: {
-          columns: ':contains("Office")'
-        }
-      },
-        'excelHtml5',
-        'csvHtml5',
-        'pdfHtml5'
+      'copy', 'csv', 'excel', 'pdf', 'print'
     ]
   } );
 });

@@ -5,7 +5,7 @@ if (isset($_POST['pass'])){
   if ($pass == $password){
     header("Location: http://localhost:8888/index.php");
   }else{
-    echo "<p>Wrong password. Please try again.<p>";
+    echo "<script type='text/javascript'>alert('Wrong password. Please try again.');</script>;";
   }
 }
 ?>

@@ -48,18 +48,6 @@
                 <li class="active"><a href="#">Home</a></li>
                 <li><a href="/map.php">College Map</a></li>
                 <li><a href="/secure.php">College Directory</a></li>
-                <li class="dropdown">
-                  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Dropdown <span class="caret"></span></a>
-                  <ul class="dropdown-menu">
-                    <li><a href="#">Action</a></li>
-                    <li><a href="#">Another action</a></li>
-                    <li><a href="#">Something else here</a></li>
-                    <li role="separator" class="divider"></li>
-                    <li class="dropdown-header">Nav header</li>
-                    <li><a href="#">Separated link</a></li>
-                    <li><a href="#">One more separated link</a></li>
-                  </ul>
-                </li>
               </ul>
             </div>
           </div>
@@ -77,12 +65,12 @@
       </ol>
       <div class="carousel-inner" role="listbox">
         <div class="item active">
-          <img class="first-slide" src="Images/alums2.jpg" alt="First slide">
+          <img class="first-slide" src="Images/women-who-code.jpg" alt="First slide">
           <!--<img class="first-slide" src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==" alt="First slide">-->
           <div class="container">
             <div class="carousel-caption">
               <h1>Alumni Spotlights</h1>
-              <p>Read stories from our college alumni around the nation!</p>
+              <p>Learn about college from your sisters themselves!</p>
               <p><a class="btn btn-lg btn-primary" href="#" role="button">Read Stories</a></p>
             </div>
           </div>
@@ -92,19 +80,18 @@
           <!--<img class="second-slide" src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==" alt="Second slide">-->
           <div class="container">
             <div class="carousel-caption">
-              <h1>College Directory</h1>
+              <h1>Collegiate Alumni Directory</h1>
               <p>Find and connect with alumni in colleges across the nation!</p>
               <p><a class="btn btn-lg btn-primary" href="/index.php" role="button">Connect</a></p>
             </div>
           </div>
         </div>
         <div class="item">
-          <img class="third-slide" src="Images/collegeMap.jpg" alt="Third slide">
-          <!--<img class="third-slide" src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==" alt="Third slide">-->
+          <img class="third-slide" src="Images/colleges.jpg" alt="Third slide">
           <div class="container">
             <div class="carousel-caption">
               <h1>College Map</h1>
-              <p>Explore colleges and universities that Girl Who Code alumni have attended over the years. You might find one that's a perfect match for you!</p>
+              <p>Explore colleges around the nation!</p>
               <p><a class="btn btn-lg btn-primary collegeMap" href="#" role="button">Explore</a></p>
             </div>
           </div>
@@ -124,10 +111,9 @@
     <!-- Marketing messaging and featurettes
     ================================================== -->
     <!-- Wrap the rest of the page in another container to center all the content. -->
-
     <div class="container marketing">
-
       <!-- Three columns of text below the carousel -->
+
       <div class="row">
         <div class="col-lg-4">
           <img class="img-circle" src="Images/alumni-MargoHayes.png" alt="Generic placeholder image" width="140" height="140">
@@ -156,11 +142,13 @@
 
       <div class="row featurette">
         <div class="col-md-7">
-          <h2 class="featurette-heading">College Directory <span class="text-muted">Find girls like you.</span></h2>
+          <h2 class="featurette-heading">Collegiate Alumni Directory <span class="text-muted">Connect with girls like you.</span></h2>
           <p class="lead">Donec ullamcorper nulla non metus auctor fringilla. Vestibulum id ligula porta felis euismod semper. Praesent commodo cursus magna, vel scelerisque nisl consectetur. Fusce dapibus, tellus ac cursus commodo.</p>
         </div>
         <div class="col-md-5">
-          <img class="featurette-image img-responsive center-block" src="Images/collegebound.jpg" alt="Generic placeholder image">
+          <a href="/secure.php">
+            <img class="featurette-image img-responsive center-block" src="Images/collegebound.jpg" alt="Generic placeholder image">
+          </a>
         </div>
       </div>
 
@@ -168,11 +156,11 @@
 
       <div class="row featurette">
         <div class="col-md-7 col-md-push-5">
-          <h2 class="featurette-heading">College Map <span class="text-muted">Explore colleges.</span></h2>
+          <h2 class="featurette-heading">College Map <span class="text-muted">Explore colleges within the US to find the right fit for you.</span></h2>
           <p class="lead">Donec ullamcorper nulla non metus auctor fringilla. Vestibulum id ligula porta felis euismod semper. Praesent commodo cursus magna, vel scelerisque nisl consectetur. Fusce dapibus, tellus ac cursus commodo.</p>
         </div>
         <div class="col-md-5 col-md-pull-7">
-          <img class="featurette-image img-responsive center-block" src="Images/collegeMap.jpg" alt="Generic placeholder image">
+          <img class="featurette-image img-responsive center-block" src="Images/colleges.jpg" alt="Generic placeholder image">
         </div>
       </div>
 
