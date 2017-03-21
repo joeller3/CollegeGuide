@@ -10,13 +10,15 @@ ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
 //connect to db
-$user = 'root';
-$password = 'root';
-$db = 'alumni_test';
-$port = 8889;
-$host = 'localhost';
-$socket = 'localhost:/Applications/MAMP/tmp/mysql/mysql.sock';
-
+$user = 'girlsw5_jeff';
+$password = '?I(#DaWol[kV';
+$db = 'girlsw5_alumnicollege';
+$host = '173.205.126.123';
+// $user = 'root';
+// $password = 'root';
+// $db = 'alumni_test';
+// $port = 8889;
+// $host = 'localhost';
 $link = mysqli_connect(
    $host,
    $user,

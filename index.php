@@ -5,7 +5,7 @@
 include 'db.php';
 
 //retrieve colleges in db
-$query = "SELECT Institution_Name FROM institutions ORDER BY Institution_Name";
+$query = "SELECT DISTINCT institutions.Institution_Name FROM alums INNER JOIN institutions ON alums.Institution_ID = institutions.Institution_ID ORDER BY Institution_Name";
 $result = query($query);
 $ALUM_SCHOOLS = array();
 foreach ($result as $row){
@@ -121,12 +121,12 @@ function genTable(){
 function populateTable($result){
 	foreach ($result as $row){
 		$college = $row[0];
-		$first = $row[1];
-		$last = $row[2];
-		$email = $row[3];
-		$program = $row[4];
+		$program = $row[1];
+		$firstname = $row[2];
+		$lastname = $row[3];
+		$email = $row[4];
 		$linkedin = $row[5];
-		echo "<tr> <td>$college</td> <td>$first</td> <td>$last</td> <td>$email</td> <td>$program</td> <td><a href='$linkedin'>$linkedin</a></td> </tr>";
+		echo "<tr> <td>$college</td> <td>$firstname</td> <td>$lastname</td> <td>$email</td> <td>$program</td> <td><a href='$linkedin'>$linkedin</a></td> </tr>";
 	}
 }
 ?>
@@ -158,36 +158,40 @@ function populateTable($result){
   <body>
 		<div class="header-top">
 			<nav class="row">
-				<ul>
-					<li>
-						<a href="https://girlswhocode.com/">
-							<img alt="Girls Who Code Logo" src="https://3zjc852t4swp1lmezl171oga-wpengine.netdna-ssl.com/wp-content/themes/girlswhocode/images/header-logo.png" >
-						</a>
-					</li>
-				<ul>
+				<li>
+					<a href="https://girlswhocode.com/">
+						<img alt="Girls Who Code Logo" src="https://3zjc852t4swp1lmezl171oga-wpengine.netdna-ssl.com/wp-content/themes/girlswhocode/images/header-logo.png" >
+					</a>
+				</li>
 			</nav>
 		</div><!--/header-top-->
-		<div class="header-bottom" style="background-image: url('https://3zjc852t4swp1lmezl171oga-wpengine.netdna-ssl.com/wp-content/uploads/2016/05/gwc_homepage-1170x580.jpg')">
-		</div><!--/header-bottom-->
+		<div class="header-bottom" id="customTitle" style="background-image: url('https://3zjc852t4swp1lmezl171oga-wpengine.netdna-ssl.com/wp-content/uploads/2016/05/gwc_homepage-1170x580.jpg')">
+
+		<!-- <div class="header-bottom" id="customImage">
+			<img id="image" src="https://3zjc852t4swp1lmezl171oga-wpengine.netdna-ssl.com/wp-content/uploads/2016/05/gwc_homepage-1170x580.jpg"/>
+			<h1 id="customTitle"> Collegiate Alumni Directory </h1>
+		</div> -->
+	</div><!--/header-bottom-->
 		<div class="header-call-to-action">
 			<div class="row text-center">
-				Use this directory to find and connect with other Girls Who Code alumni in college. Join the community by adding yourself to the directory <a href="/form.php" style="color: #ede813">here</a>!
+				Use this directory to find and connect with other Girls Who Code alumni in college. <a href="https://girlswhocode.com/alumni/directory/form.php" style="color: #ede813; font-size:16px"> Join the community by adding yourself to the directory here</a>!
 			</div>
 		</div>
     <div class="container">
       <div class="starter-template">
         <h1>Collegiate Alumni Directory</h1>
       </div>
+			<!-- <br> -->
       <!-- Form -->
       <div class="container">
-        <h2>Find Alumni</h2>
+        <h3>Find and Contact Girls Who Code Alumni</h3>
         <form method="post" class="form">
           <div class="form-group filter">
             <label for="College">College</label>
 						<select multiple="multiple" name="colleges[]" class="input form-control" id="College" style="width:100%">
 							<?
 								foreach ($ALUM_SCHOOLS as $school){
-									echo "<option value='$school'>$school</option>";
+									echo "<option value='$school' style='color:black'>$school</option>";
 								}
 							?>
 						</select>
@@ -197,7 +201,7 @@ function populateTable($result){
 						<select multiple="multiple" name="states[]" class="input form-control" id="State" style="width:100%">
 						<?
 							foreach ($STATES as $state){
-								echo "<option value='$state'>$state</option>";
+								echo "<option value='$state' style='color:black'>$state</option>";
 							}
 						?>
 						</select>
@@ -207,7 +211,7 @@ function populateTable($result){
             <select multiple="multiple" name="programs[]" class="input form-control" id="Program" style="width: 100%"> <!-- changed to a single program-->
 							<?
 								foreach ($PROGRAMS as $program){
-									echo "<option value='$program'>$program</option>";
+									echo "<option value='$program' style='color:black'>$program</option>";
 								}
 							?>
             </select>
@@ -215,9 +219,9 @@ function populateTable($result){
           <div class="form-group filter">
             <label for="InstitutionType">Institution Type</label>
             <select multiple="multiple" name="types[]" class="input form-control" id="CollegeType" style="width:100%">
-							<option value='Institutional'>Institutional</option>
-							<option value='Specialized'>Specialized</option>
-							<option value='Internship/Residency'>Internship/Residency</option>
+							<option value='Institutional' style="color:black">Institutional</option>
+							<option value='Specialized' style='color:black'>Specialized</option>
+							<option value='Internship/Residency' style="color:black">Internship/Residency</option>
             </select>
           </div>
           <button type="submit" class="btn btn-primary" id="SubmitBtn"><span>Find Alumni</span></button>
@@ -270,7 +274,7 @@ function populateTable($result){
 		<script src="DataTables-1.10.13/media/js/jquery.dataTables.js"></script>
 		<script src="DataTables-1.10.13/media/js/dataTables.bootstrap.js"></script>
 		<script src="DataTables-1.10.13/extensions/Buttons/js/dataTables.buttons.min.js"></script>
-		<script src="bootstrap-3.3-2.7/docs/assets/js/vendor/jszip.min.js"></script>
+		<script src="//cdnjs.cloudflare.com/ajax/libs/jszip/2.5.0/jszip.min.js"></script>
 		<script src="https://cdn.rawgit.com/bpampuch/pdfmake/0.1.24/build/pdfmake.min.js"></script>
 		<script src="https://cdn.rawgit.com/bpampuch/pdfmake/0.1.24/build/vfs_fonts.js"></script>
 		<script src="https://cdn.datatables.net/buttons/1.2.4/js/buttons.html5.min.js"></script>

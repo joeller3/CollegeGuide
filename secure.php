@@ -3,7 +3,7 @@ $password = 'girlsdocode';
 if (isset($_POST['pass'])){
   $pass = $_POST['pass'];
   if ($pass == $password){
-    header("Location: http://localhost:8888/index.php");
+    header("Location: https://girlswhocode.com/alumni/directory/index.php");
   }else{
     echo "<script type='text/javascript'>alert('Wrong password. Please try again.');</script>;";
   }

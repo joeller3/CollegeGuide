@@ -33,9 +33,9 @@ if (isset($_POST['firstname'])){
 
 	$query  = "INSERT INTO `alums` (`alum_id`, `Institution_ID`, `program_id`, `firstName`, `lastName`, `email`, `linkedin`) VALUES (NULL, '$collegeId', '$programId', '$first', '$last', '$email', '$linkedin')";
 	if(insertQuery($query)){
-		echo "<script type='text/javascript'>alert('Thank you! You have just been added Girls Who Code's College Directory!');</script>;";
+		echo "<script type='text/javascript'>alert('Thank you! You have just been added Girls Who Code's College Directory!');</script>";
 	}else{
-		echo "<script type='text/javascript'>alert('Something went wrong, please try again.');</script>;";
+		echo "<script type='text/javascript'>alert('Something went wrong, please try again.');</script>";
 	}
 
 }
@@ -68,20 +68,18 @@ if (isset($_POST['firstname'])){
   <body>
 		<div class="header-top">
 			<nav class="row">
-				<ul>
-					<li>
-						<a href="https://girlswhocode.com/">
-							<img alt="Girls Who Code Logo" src="https://3zjc852t4swp1lmezl171oga-wpengine.netdna-ssl.com/wp-content/themes/girlswhocode/images/header-logo.png" >
-						</a>
-					</li>
-				<ul>
+				<li>
+					<a href="https://girlswhocode.com/">
+						<img alt="Girls Who Code Logo" src="https://3zjc852t4swp1lmezl171oga-wpengine.netdna-ssl.com/wp-content/themes/girlswhocode/images/header-logo.png" >
+					</a>
+				</li>
 			</nav>
 		</div><!--/header-top-->
 		<div class="header-bottom" style="background-image: url('https://3zjc852t4swp1lmezl171oga-wpengine.netdna-ssl.com/wp-content/uploads/2016/05/gwc_homepage-1170x580.jpg')">
 		</div><!--/header-bottom-->
 		<div class="header-call-to-action">
 			<div class="row text-center">
-				 Add yourself to the Collegiate Alumni Directory to be in community with your Girls Who Code sisters! Go to the <a href="/index.php" style="color: #ede813">directory</a> to start connecting!
+				 Add yourself to the Collegiate Alumni Directory to be in community with your Girls Who Code sisters!<a href="https://girlswhocode.com/alumni/directory/secure.php" style="color: #ede813"> Go to the directory to start connecting</a>!
 			</div>
 		</div>
 
@@ -136,7 +134,6 @@ if (isset($_POST['firstname'])){
 		<!-- Select 2-->
 		<link href="select2-4.0.3/dist/css/select2.min.css" rel="stylesheet" />
 		<script src="select2-4.0.3/dist/js/select2.min.js"></script>
-
 		<script src="form.js"></script>
   </body>
 </html>
