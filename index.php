@@ -126,7 +126,7 @@ function populateTable($result){
 		$lastname = $row[3];
 		$email = $row[4];
 		$linkedin = $row[5];
-		echo "<tr> <td>$college</td> <td>$firstname</td> <td>$lastname</td> <td>$email</td> <td>$program</td> <td><a href='$linkedin'>$linkedin</a></td> </tr>";
+		echo "<tr> <td>$college</td> <td>$firstname</td> <td>$lastname</td> <td>$email</td> <td>$program</td> <td><a href='$linkedin' target='_blank'>$linkedin</a></td> </tr>";
 	}
 }
 ?>
@@ -184,7 +184,7 @@ function populateTable($result){
 			<!-- <br> -->
       <!-- Form -->
       <div class="container">
-        <h3>Find and Contact Girls Who Code Alumni</h3>
+        <h3>Find and Contact with Girls Who Code Alumni</h3>
         <form method="post" class="form">
           <div class="form-group filter">
             <label for="College">College</label>

@@ -79,14 +79,14 @@ if (isset($_POST['firstname'])){
 		</div><!--/header-bottom-->
 		<div class="header-call-to-action">
 			<div class="row text-center">
-				 Add yourself to the Collegiate Alumni Directory to be in community with your Girls Who Code sisters!<a href="https://girlswhocode.com/alumni/directory/secure.php" style="color: #ede813"> Go to the directory to start connecting</a>!
+				 Add yourself to the Collegiate Alumni Directory to be a resource for alumni!<a href="https://girlswhocode.com/alumni/directory/index.php" style="color: #ede813"> Go to the directory to start connecting</a>!
 			</div>
 		</div>
 
 	<!--Form-->
     <div class="container">
 		<div class="starter-template">
-			<h1>College Directory Form</h1>
+			<h1>Share Your Contact Information with the Girls Who Code Community</h1>
 		</div>
       <!-- Form -->
 		 <form method="post">
@@ -97,6 +97,7 @@ if (isset($_POST['firstname'])){
 				<input name="lastname" class="form-control" type="text" id="LastName" required="required">
 				<label for="Email">Email Address</label>
 				<input name="email" class="form-control" type="text" id="Email" required="required">
+				<!-- check if it is a valid url -->
 				<label for="LinkedIn"> LinkedIn</label>
 				<input name="linkedin" class="form-control" type="text" id="LinkedIn">
 

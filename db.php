@@ -14,11 +14,6 @@ $user = 'girlsw5_jeff';
 $password = '?I(#DaWol[kV';
 $db = 'girlsw5_alumnicollege';
 $host = '173.205.126.123';
-// $user = 'root';
-// $password = 'root';
-// $db = 'alumni_test';
-// $port = 8889;
-// $host = 'localhost';
 $link = mysqli_connect(
    $host,
    $user,
