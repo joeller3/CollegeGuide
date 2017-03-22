@@ -184,7 +184,7 @@ function populateTable($result){
 			<!-- <br> -->
       <!-- Form -->
       <div class="container">
-        <h3>Find and Contact with Girls Who Code Alumni</h3>
+        <h3>Find and Contact Girls Who Code Alumni</h3>
         <form method="post" class="form">
           <div class="form-group filter">
             <label for="College">College</label>

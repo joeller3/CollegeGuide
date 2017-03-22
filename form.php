@@ -86,7 +86,7 @@ if (isset($_POST['firstname'])){
 	<!--Form-->
     <div class="container">
 		<div class="starter-template">
-			<h1>Share Your Contact Information with the Girls Who Code Community</h1>
+			<h2>Share Your Contact Information with the Girls Who Code Community</h2>
 		</div>
       <!-- Form -->
 		 <form method="post">

@@ -1,7 +1,7 @@
-h1 {
+h1 , h2{
   font-weight: bold;
 }
-h3, p, h1, label, #directoryTable {
+h3, h2, p, h1, label, #directoryTable {
   color: #00416a;
   font-family: 'Open Sans', sans-serif;
 }
