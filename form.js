@@ -1,9 +1,9 @@
-$(document).ready(function() {
+$(document).ready(function(){
 
   $("#College").select2({
     placeholder: "Select an Institution",
     allowClear: true,
-    initSelection: function(element, callback) {
+    initSelection: function(element, callback){
     }
   });
 

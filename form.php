@@ -8,13 +8,14 @@ $ALUM_SCHOOLS = array();
 foreach ($result as $row){
 	array_push($ALUM_SCHOOLS, $row[0]);
 }
+
 $query = "SELECT program_name FROM programs ORDER BY program_name";
 $result = query($query);
 $PROGRAMS = array();
 foreach ($result as $row){
 	array_push($PROGRAMS, $row[0]);
-
 }
+
 if (isset($_POST['firstname'])){
 	$first = $_POST['firstname'];
 	$last = $_POST['lastname'];
@@ -32,12 +33,12 @@ if (isset($_POST['firstname'])){
 	$programId = $result[0][0];
 
 	$query  = "INSERT INTO `alums` (`alum_id`, `Institution_ID`, `program_id`, `firstName`, `lastName`, `email`, `linkedin`) VALUES (NULL, '$collegeId', '$programId', '$first', '$last', '$email', '$linkedin')";
+
 	if(insertQuery($query)){
 		echo "<script type='text/javascript'>alert('Thank you! You have just been added Girls Who Code's College Directory!');</script>";
 	}else{
 		echo "<script type='text/javascript'>alert('Something went wrong, please try again.');</script>";
 	}
-
 }
 
 ?>
@@ -113,11 +114,11 @@ if (isset($_POST['firstname'])){
 				<label for="College" class="col-2 col-form-label">College</label>
 				<select name="college[]" class="input form-control" id="College" style="width:100%">
 					<option></option>
-				<?
-					foreach ($ALUM_SCHOOLS as $school){
-						echo "<option value='$school'>$school</option>";
-					}
-				?>
+					<?
+						foreach ($ALUM_SCHOOLS as $school){
+							echo "<option value='$school'>$school</option>";
+						}
+					?>
 				</select>
 				<br></br>
 				<button type="submit" class="btn btn-primary" id="SubmitBtn" onclick="confirmation">Submit</button>

@@ -37,7 +37,7 @@ function genTable(){
 
 	$query = 'SELECT institutions.Institution_Name, programs.program_name, firstName, lastName, email, linkedin FROM alums INNER JOIN institutions ON alums.Institution_ID = institutions.Institution_ID INNER JOIN programs ON alums.program_id = programs.program_id WHERE ';
 	//college filter
-	if (isset($_POST['colleges'])) {
+	if (isset($_POST['colleges'])){
 		$colleges = $_POST['colleges'];
 		if(count($colleges) > 1){
 			$institutionFilter = "(institutions.Institution_Name = '" . implode("' OR institutions.Institution_Name = '",$colleges) . "')";
@@ -111,7 +111,7 @@ function genTable(){
 	if ($isquery){ //query db with user inputs
 		$result = query($query);
 		populateTable($result);
-	}else { //query db for all alumni and their respective schools
+	}else{ //query db for all alumni and their respective schools
 		$query = 'SELECT institutions.Institution_Name, programs.program_name, firstName, lastName, email, linkedin FROM alums INNER JOIN institutions ON alums.Institution_ID = institutions.Institution_ID INNER JOIN programs ON alums.program_id = programs.program_id';
 		$result = query($query);
 		populateTable($result);
@@ -166,12 +166,7 @@ function populateTable($result){
 			</nav>
 		</div><!--/header-top-->
 		<div class="header-bottom" id="customTitle" style="background-image: url('https://3zjc852t4swp1lmezl171oga-wpengine.netdna-ssl.com/wp-content/uploads/2016/05/gwc_homepage-1170x580.jpg')">
-
-		<!-- <div class="header-bottom" id="customImage">
-			<img id="image" src="https://3zjc852t4swp1lmezl171oga-wpengine.netdna-ssl.com/wp-content/uploads/2016/05/gwc_homepage-1170x580.jpg"/>
-			<h1 id="customTitle"> Collegiate Alumni Directory </h1>
-		</div> -->
-	</div><!--/header-bottom-->
+		</div><!--/header-bottom-->
 		<div class="header-call-to-action">
 			<div class="row text-center">
 				Use this directory to find and connect with other Girls Who Code alumni in college. <a href="https://girlswhocode.com/alumni/directory/form.php" style="color: #ede813; font-size:16px"> Join the community by adding yourself to the directory here</a>!
@@ -181,7 +176,7 @@ function populateTable($result){
       <div class="starter-template">
         <h1>Collegiate Alumni Directory</h1>
       </div>
-			<!-- <br> -->
+
       <!-- Form -->
       <div class="container">
         <h3>Find and Contact Girls Who Code Alumni</h3>
@@ -253,7 +248,7 @@ function populateTable($result){
 					?>
         </tbody>
       </table>
-	</div>
+		</div>
     <!-- Bootstrap core JavaScript
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->

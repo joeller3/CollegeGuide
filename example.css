@@ -1,20 +1,24 @@
 h1 , h2{
   font-weight: bold;
 }
-h3, h2, p, h1, label, #directoryTable {
+
+h3, h2, p, h1, label, #directoryTable{
   color: #00416a;
   font-family: 'Open Sans', sans-serif;
 }
-p, h1, label, #directoryTable {
+
+p, h1, label, #directoryTable{
   text-align: center;
 }
+
 body {
   padding-top: 50px;
   font-family: 'Open Sans', sans-serif;
   background-color: #ecf9f5;
   color: black !important;
 }
-#SubmitBtn {
+
+#SubmitBtn{
   background-color: #4fb28c;
   text-decoration: none;
   display: inline-block;
@@ -28,14 +32,13 @@ body {
   margin: 5px;
 }
 
-#SubmitBtn span {
+#SubmitBtn span{
   cursor: pointer;
   display: inline-block;
   position: relative;
   transition: 0.5s;
 }
-
-#SubmitBtn span:after {
+#SubmitBtn span:after{
   content: '\00bb';
   position: absolute;
   opacity: 0;
@@ -44,18 +47,18 @@ body {
   transition: 0.5s;
 }
 
-#SubmitBtn:hover span {
+#SubmitBtn:hover span{
   padding-right: 15px;
 }
 
-#SubmitBtn:hover span:after {
+#SubmitBtn:hover span:after{
   opacity: 1;
   right: 0;
 }
-.hovering i::before {
+.hovering i::before{
   display: none;
 }
-.hovering i::before {
+.hovering i::before{
   color: red;
 }
 header-bottom{
@@ -79,7 +82,7 @@ header-bottom{
   height:40.625rem;
   background-position:50% 0%
 }
-.header-call-to-action {
+.header-call-to-action{
     padding-top: .625rem;
     padding-bottom: .625rem;
     padding-left: 20px;
@@ -95,35 +98,14 @@ header-bottom{
 .filter{
   width: 100%;
 }
-#customImage {
+#customImage{
   /*height: 400px;
   width: 400px;*/
   position: relative;
 }
-/*#image {
-  -webkit-background-size:cover;
-  background-size:cover;
-  height:40.625rem;
-  background-position:50% 0%
-}*/
-.header-bottom {
+.header-bottom{
   -webkit-background-size:cover;
   background-size:cover;
   height:40.625rem;
   background-position:50% 0%
 }
-/*#customTitle {
-  z-index: 100;
-  position: absolute;
-  color: white;
-  font-family: 'Open Sans', sans-serif;
-  font-size: 50px;
-  font-weight: bold;
-  text-align: center;*/
-  /*width: 500px;*/
-  /*left: 100px;
-  top: 200px;*/
-  /*font-size: 2.75rem;*/
-  /*line-height: 1.1;
-  margin-bottom: 1.5625rem;
-}*/
